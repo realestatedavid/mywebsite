@@ -176,7 +176,7 @@ const CLIENTELE_CATEGORIES = [
   }
 ];
 
-const SMS_CONSENT_COPY = `I agree to be contacted by text by David Tran Real Estate. Reply STOP to unsubscribe. Msg/data rates may apply. Msg frequency varies.`;
+const SMS_CONSENT_COPY = `I agree to be contacted by text by David Tran and his team regarding real estate services. Reply STOP to unsubscribe. Msg/data rates may apply. Msg frequency varies.`;
 
 export default function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -354,6 +354,9 @@ export default function App() {
       newErrors.phone = 'Phone is required';
     } else if (phoneDigits.length !== 10) {
       newErrors.phone = 'Please enter a 10-digit number';
+    }
+    if (!leadData.smsConsent) {
+      newErrors.smsConsent = 'Consent is required';
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -663,13 +666,20 @@ export default function App() {
                             checked={leadData.smsConsent}
                             onChange={(e) => {
                               setLeadData(prev => ({ ...prev, smsConsent: e.target.checked }));
+                              if (errors.smsConsent) setErrors(prev => { const n = { ...prev }; delete n.smsConsent; return n; });
                             }}
                             className="mt-1 h-4 w-4 rounded border-black/20 text-black focus:ring-black"
                           />
                           <span className="text-[10px] uppercase tracking-[0.16em] text-black/60 font-semibold leading-relaxed">
-                            Text Message Opt-In (Optional)
+                            Text Message Consent
                           </span>
                         </label>
+
+                        {errors.smsConsent && (
+                          <p className="text-[10px] uppercase tracking-[0.16em] text-red-500 font-medium">
+                            {errors.smsConsent}
+                          </p>
+                        )}
 
                         <p className="text-[11px] md:text-[12px] leading-5 text-black/55 font-light">
                           {SMS_CONSENT_COPY}{' '}
@@ -705,7 +715,7 @@ export default function App() {
 
                     <button
                       type="submit"
-                      disabled={isSubmitting}
+                      disabled={isSubmitting || !leadData.smsConsent}
                       className="w-full bg-black text-white font-medium py-4 md:py-[1.125rem] rounded-xl hover:bg-black/90 transition-all flex items-center justify-center gap-2 group text-base md:text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {isSubmitting ? 'Connecting...' : 'Connect'}
