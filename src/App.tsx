@@ -192,18 +192,18 @@ export default function App() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [toast, setToast] = useState<{ message: string; type: 'error' | 'success' } | null>(null);
 
-  // Disable page scroll while the intro, lead form, or legal modal is active.
+  // Disable page scroll while overlays are active.
   useEffect(() => {
-    if (phase === 'intro' || phase === 'form' || legalModal) {
+    if (phase === 'intro' || phase === 'form' || legalModal || resourceFormPhase !== 'idle') {
       document.body.style.overflow = 'hidden';
-      if (phase === 'intro' || phase === 'form') window.scrollTo(0, 0);
+      if (phase === 'intro' || phase === 'form' || resourceFormPhase !== 'idle') window.scrollTo(0, 0);
     } else {
       document.body.style.overflow = 'unset';
     }
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [phase, legalModal]);
+  }, [phase, legalModal, resourceFormPhase]);
 
   const nextTestimonial = () => {
     setTestimonialIndex((prev) => (prev + 1) % TESTIMONIALS.length);
@@ -535,14 +535,14 @@ export default function App() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.995 }}
               transition={{ duration: 0.08, ease: "easeOut" }}
-              className="fixed inset-0 z-30 flex items-start justify-center overflow-y-auto px-4 py-6 md:px-6 md:py-10 bg-white/70 backdrop-blur-md"
+              className="fixed inset-0 z-30 flex items-center justify-center overflow-y-auto px-4 py-4 md:px-6 md:py-6 bg-white/70 backdrop-blur-md"
               onClick={() => {
                 setPhase('landing');
                 setStep(1);
               }}
             >
               <div
-                className="w-full max-w-xl bg-white/80 backdrop-blur-3xl border border-black/10 rounded-[2.5rem] p-8 md:p-12 shadow-2xl relative overflow-y-auto max-h-[calc(100svh-2rem)] md:max-h-[calc(100svh-4rem)]"
+                className={`w-full ${step === 2 ? 'max-w-2xl' : 'max-w-xl'} bg-white/80 backdrop-blur-3xl border border-black/10 rounded-[2.5rem] p-6 md:p-8 shadow-2xl relative overflow-y-auto max-h-[calc(100svh-1.5rem)] md:max-h-[calc(100svh-3rem)]`}
                 onClick={(e) => e.stopPropagation()}
               >
                 <button
@@ -551,20 +551,20 @@ export default function App() {
                     setPhase('landing');
                     setStep(1);
                   }}
-                  className="absolute top-5 right-5 md:top-6 md:right-6 w-10 h-10 rounded-full bg-black/5 flex items-center justify-center hover:bg-black hover:text-white transition-all z-20"
+                  className="absolute top-4 right-4 md:top-5 md:right-5 h-8 w-8 md:h-9 md:w-9 flex items-center justify-center text-black/30 hover:text-black transition-colors z-20"
                   aria-label="Close lead form"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-4 h-4 md:w-[18px] md:h-[18px] stroke-[1.5]" />
                 </button>
                 {step === 1 ? (
-                  <div className="space-y-8">
+                  <div className="space-y-6">
                     <div className="space-y-2">
-                      <div className="text-[10px] uppercase tracking-[0.4em] text-black/30 mb-4">DAVID TRAN | REAL ESTATE</div>
-                      <h2 className="text-4xl md:text-5xl font-light tracking-tight leading-tight">Your next move starts here.</h2>
-                      <p className="text-black/50 font-light text-lg">Select your primary objective to begin.</p>
+                      <div className="text-[10px] uppercase tracking-[0.35em] text-black/30 mb-3">DAVID TRAN | REAL ESTATE</div>
+                      <h2 className="text-3xl md:text-4xl font-light tracking-tight leading-tight">Your next move starts here.</h2>
+                      <p className="text-black/50 font-light text-base md:text-lg">Select your primary objective to begin.</p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {[
                         { id: 'buying', label: 'Buying', icon: Home },
                         { id: 'selling', label: 'Selling', icon: Wallet },
@@ -573,11 +573,11 @@ export default function App() {
                         <button
                           key={item.id}
                           onClick={() => handleTypeSelect(item.id as LeadType)}
-                          className="group flex items-center justify-between p-6 rounded-2xl border border-black/5 bg-black/5 hover:bg-black/10 hover:border-black/20 transition-all text-left"
+                          className="group flex items-center justify-between p-5 rounded-2xl border border-black/5 bg-black/5 hover:bg-black/10 hover:border-black/20 transition-all text-left"
                         >
                           <div className="flex items-center gap-4">
                             <item.icon className="w-6 h-6 text-black/70 group-hover:text-black transition-colors" />
-                            <span className="text-lg font-light tracking-wide">{item.label}</span>
+                            <span className="text-base md:text-lg font-light tracking-wide">{item.label}</span>
                           </div>
                           <ArrowRight className="w-5 h-5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                         </button>
@@ -585,20 +585,20 @@ export default function App() {
                     </div>
                   </div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="space-y-8">
-                    <div className="space-y-2">
+                  <form onSubmit={handleSubmit} className="space-y-5 md:space-y-6">
+                    <div className="space-y-1.5">
                       <button
                         type="button"
                         onClick={() => setStep(1)}
-                        className="text-black/40 hover:text-black text-sm flex items-center gap-2 mb-4 transition-colors"
+                        className="text-black/40 hover:text-black text-sm flex items-center gap-2 mb-2 transition-colors"
                       >
                         ← Back to selection
                       </button>
-                      <h2 className="text-4xl md:text-5xl font-light tracking-tight">Let's connect.</h2>
-                      <p className="text-black/50 font-light text-lg">I'll reach out to discuss your {leadData.type} goals.</p>
+                      <h2 className="text-3xl md:text-4xl font-light tracking-tight">Let's connect.</h2>
+                      <p className="text-black/50 font-light text-sm md:text-base">I'll reach out to discuss your {leadData.type} goals.</p>
                     </div>
 
-                    <div className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                       <div className="space-y-1">
                         <label className="text-[10px] uppercase tracking-[0.2em] text-black/40 font-semibold ml-1 flex justify-between">
                           Full Name
@@ -612,7 +612,7 @@ export default function App() {
                             setLeadData(prev => ({ ...prev, name: e.target.value }));
                             if (errors.name) setErrors(prev => { const n = { ...prev }; delete n.name; return n; });
                           }}
-                          className={`w-full bg-black/5 border transition-all rounded-xl px-4 py-4 focus:outline-none font-light text-lg ${errors.name ? 'border-red-500/30 bg-red-500/[0.02] focus:border-red-500/50' : 'border-black/10 focus:border-black/30'
+                          className={`w-full bg-black/5 border transition-all rounded-xl px-4 py-3 md:py-3.5 focus:outline-none font-light text-base md:text-lg ${errors.name ? 'border-red-500/30 bg-red-500/[0.02] focus:border-red-500/50' : 'border-black/10 focus:border-black/30'
                             }`}
                         />
                       </div>
@@ -629,11 +629,11 @@ export default function App() {
                             setLeadData(prev => ({ ...prev, email: e.target.value }));
                             if (errors.email) setErrors(prev => { const n = { ...prev }; delete n.email; return n; });
                           }}
-                          className={`w-full bg-black/5 border transition-all rounded-xl px-4 py-4 focus:outline-none font-light text-lg ${errors.email ? 'border-red-500/30 bg-red-500/[0.02] focus:border-red-500/50' : 'border-black/10 focus:border-black/30'
+                          className={`w-full bg-black/5 border transition-all rounded-xl px-4 py-3 md:py-3.5 focus:outline-none font-light text-base md:text-lg ${errors.email ? 'border-red-500/30 bg-red-500/[0.02] focus:border-red-500/50' : 'border-black/10 focus:border-black/30'
                             }`}
                         />
                       </div>
-                      <div className="space-y-1">
+                      <div className="space-y-1 md:col-span-2">
                         <label className="text-[10px] uppercase tracking-[0.2em] text-black/40 font-semibold ml-1 flex justify-between">
                           Phone Number
                           {errors.phone && <span className="text-red-500 lowercase tracking-normal font-normal">*{errors.phone}</span>}
@@ -649,12 +649,12 @@ export default function App() {
                             setLeadData(prev => ({ ...prev, phone: formatted }));
                             if (errors.phone) setErrors(prev => { const n = { ...prev }; delete n.phone; return n; });
                           }}
-                          className={`w-full bg-black/5 border transition-all rounded-xl px-4 py-4 focus:outline-none font-light text-lg ${errors.phone ? 'border-red-500/30 bg-red-500/[0.02] focus:border-red-500/50' : 'border-black/10 focus:border-black/30'
+                          className={`w-full bg-black/5 border transition-all rounded-xl px-4 py-3 md:py-3.5 focus:outline-none font-light text-base md:text-lg ${errors.phone ? 'border-red-500/30 bg-red-500/[0.02] focus:border-red-500/50' : 'border-black/10 focus:border-black/30'
                             }`}
                         />
                       </div>
 
-                      <div className="rounded-2xl border border-black/10 bg-black/[0.02] px-4 py-4 md:px-5 md:py-5 space-y-2.5">
+                      <div className="rounded-2xl border border-black/10 bg-black/[0.02] px-4 py-3.5 md:px-5 md:py-4 space-y-2 md:col-span-2">
                         <label className="flex items-start gap-3 cursor-pointer">
                           <input
                             type="checkbox"
@@ -664,12 +664,12 @@ export default function App() {
                             }}
                             className="mt-1 h-4 w-4 rounded border-black/20 text-black focus:ring-black"
                           />
-                          <span className="text-[10px] md:text-[10.5px] uppercase tracking-[0.18em] text-black/60 font-semibold leading-relaxed">
+                          <span className="text-[10px] uppercase tracking-[0.16em] text-black/60 font-semibold leading-relaxed">
                             Text Message Opt-In (Optional)
                           </span>
                         </label>
 
-                        <p className="text-[12px] md:text-[13px] leading-6 text-black/55 font-light">
+                        <p className="text-[11px] md:text-[12px] leading-5 text-black/55 font-light">
                           {SMS_CONSENT_COPY}{' '}
                           <button
                             type="button"
@@ -694,7 +694,7 @@ export default function App() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full bg-black text-white font-medium py-5 rounded-xl hover:bg-black/90 transition-all flex items-center justify-center gap-2 group text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full bg-black text-white font-medium py-4 md:py-[1.125rem] rounded-xl hover:bg-black/90 transition-all flex items-center justify-center gap-2 group text-base md:text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {isSubmitting ? 'Connecting...' : 'Connect'}
                       {!isSubmitting && <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />}
@@ -1044,7 +1044,7 @@ export default function App() {
         {/* Resource Modal */}
         <AnimatePresence>
           {resourceFormPhase !== 'idle' && (
-            <div className="fixed inset-0 z-[100] flex items-center justify-center px-6">
+            <div className="fixed inset-0 z-[100] flex items-center justify-center px-4 py-4 md:px-6 md:py-6">
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -1060,16 +1060,16 @@ export default function App() {
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                className="relative w-full max-w-lg bg-white rounded-[2.5rem] p-10 md:p-16 shadow-2xl overflow-y-auto max-h-[90vh] flex flex-col"
+                className="relative w-full max-w-xl bg-white rounded-[2.5rem] p-6 md:p-8 shadow-2xl overflow-y-auto max-h-[calc(100svh-1.5rem)] md:max-h-[calc(100svh-3rem)] flex flex-col"
               >
                 <button
                   onClick={() => {
                     setResourceFormPhase('idle');
                     setActiveResource(null);
                   }}
-                  className="absolute top-6 right-6 text-black/20 hover:text-black transition-colors z-50 p-2"
+                  className="absolute top-4 right-4 md:top-5 md:right-5 h-8 w-8 md:h-9 md:w-9 flex items-center justify-center text-black/30 hover:text-black transition-colors z-50"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-4 h-4 md:w-[18px] md:h-[18px] stroke-[1.5]" />
                 </button>
 
                 <AnimatePresence mode="wait">
@@ -1079,15 +1079,14 @@ export default function App() {
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -20 }}
-                      className="space-y-10 pt-12"
+                      className="space-y-5 md:space-y-6 pt-4 md:pt-5"
                     >
-                      <div className="space-y-3">
-                        <h2 className="text-4xl font-light tracking-tight">Where should I send it?</h2>
-                        <p className="text-black/50 font-light text-lg">I’ll email it to you immediately.</p>
+                      <div className="space-y-1.5">
+                        <h2 className="text-3xl md:text-4xl font-light tracking-tight">Where should I send it?</h2>
                       </div>
 
-                      <form onSubmit={handleResourceSubmit} className="space-y-6">
-                        <div className="space-y-4">
+                      <form onSubmit={handleResourceSubmit} className="space-y-5">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                           <div className="space-y-1">
                             <label className="text-[10px] uppercase tracking-[0.2em] text-black/40 font-semibold ml-1 flex justify-between">
                               First Name
@@ -1101,7 +1100,7 @@ export default function App() {
                                 setResourceFormData({ ...resourceFormData, firstName: e.target.value });
                                 if (errors.firstName) setErrors(prev => { const n = { ...prev }; delete n.firstName; return n; });
                               }}
-                              className={`w-full bg-black/5 border transition-all rounded-xl px-4 py-4 focus:outline-none font-light text-lg ${errors.firstName ? 'border-red-500/30 bg-red-500/[0.02] focus:border-red-500/50' : 'border-black/10 focus:border-black/30'
+                              className={`w-full bg-black/5 border transition-all rounded-xl px-4 py-3 md:py-3.5 focus:outline-none font-light text-base md:text-lg ${errors.firstName ? 'border-red-500/30 bg-red-500/[0.02] focus:border-red-500/50' : 'border-black/10 focus:border-black/30'
                                 }`}
                             />
                           </div>
@@ -1118,23 +1117,23 @@ export default function App() {
                                 setResourceFormData({ ...resourceFormData, email: e.target.value });
                                 if (errors.email) setErrors(prev => { const n = { ...prev }; delete n.email; return n; });
                               }}
-                              className={`w-full bg-black/5 border transition-all rounded-xl px-4 py-4 focus:outline-none font-light text-lg ${errors.email ? 'border-red-500/30 bg-red-500/[0.02] focus:border-red-500/50' : 'border-black/10 focus:border-black/30'
+                              className={`w-full bg-black/5 border transition-all rounded-xl px-4 py-3 md:py-3.5 focus:outline-none font-light text-base md:text-lg ${errors.email ? 'border-red-500/30 bg-red-500/[0.02] focus:border-red-500/50' : 'border-black/10 focus:border-black/30'
                                 }`}
                             />
                           </div>
                         </div>
 
                         <div className="flex items-start gap-3">
-                          <span className="text-sm text-black/50 font-light leading-tight select-none">
+                          <span className="text-[12px] md:text-sm text-black/50 font-light leading-5 select-none">
                             By clicking "Get it", you'll receive this resource and occasional opportunities.
                           </span>
                         </div>
 
-                        <div className="space-y-4 pt-4">
+                        <div className="space-y-3 pt-1">
                           <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full bg-black text-white font-medium py-5 rounded-xl hover:bg-black/90 transition-all flex items-center justify-center gap-2 group text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full bg-black text-white font-medium py-4 md:py-[1.125rem] rounded-xl hover:bg-black/90 transition-all flex items-center justify-center gap-2 group text-base md:text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             {isSubmitting ? 'Sending...' : 'Get it'}
                           </button>
@@ -1150,23 +1149,23 @@ export default function App() {
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.95 }}
-                      className="text-center space-y-8 pt-16 pb-4"
+                      className="text-center space-y-6 pt-10 md:pt-12 pb-2"
                     >
                       <div className="flex justify-center">
-                        <div className="w-20 h-20 rounded-full bg-black/5 flex items-center justify-center border border-black/10">
-                          <Mail className="w-10 h-10 text-black" />
+                        <div className="w-16 h-16 md:w-18 md:h-18 rounded-full bg-black/5 flex items-center justify-center border border-black/10">
+                          <Mail className="w-8 h-8 md:w-9 md:h-9 text-black" />
                         </div>
                       </div>
-                      <div className="space-y-3">
-                        <h2 className="text-4xl font-light tracking-tight">Check your inbox.</h2>
-                        <p className="text-black/50 font-light text-lg">
+                      <div className="space-y-2">
+                        <h2 className="text-3xl md:text-4xl font-light tracking-tight">Check your inbox.</h2>
+                        <p className="text-black/50 font-light text-base md:text-lg">
                           {activeResource?.id === 'first-time-buyer' && "One step closer to your new home"}
                           {activeResource?.id === 'buy-or-pass' && "One step closer to your next investment"}
                           {activeResource?.id === 'walk-away-number' && "One step closer to selling"}
                           {!['first-time-buyer', 'buy-or-pass', 'walk-away-number'].includes(activeResource?.id || '') && "Your resource is on the way."}
                         </p>
                       </div>
-                      <div className="pt-4">
+                      <div className="pt-2">
                         <button
                           onClick={() => {
                             setResourceFormPhase('idle');
