@@ -188,6 +188,8 @@ export default function App() {
   const [resourceFormData, setResourceFormData] = useState({ firstName: '', email: '', segment: '', subscribe: true });
   const [testimonialIndex, setTestimonialIndex] = useState(0);
   const [legalModal, setLegalModal] = useState<'privacy' | 'terms' | null>(null);
+  const [returnToLeadForm, setReturnToLeadForm] = useState(false);
+  const [returnToLeadStep, setReturnToLeadStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [toast, setToast] = useState<{ message: string; type: 'error' | 'success' } | null>(null);
@@ -673,7 +675,12 @@ export default function App() {
                           {SMS_CONSENT_COPY}{' '}
                           <button
                             type="button"
-                            onClick={() => setLegalModal('privacy')}
+                            onClick={() => {
+                              setPhase('landing');
+                              setReturnToLeadForm(true);
+                              setReturnToLeadStep(step);
+                              setLegalModal('privacy');
+                            }}
                             className="underline underline-offset-4 hover:text-black transition-colors"
                           >
                             Privacy Policy
@@ -681,7 +688,12 @@ export default function App() {
                           and{' '}
                           <button
                             type="button"
-                            onClick={() => setLegalModal('terms')}
+                            onClick={() => {
+                              setPhase('landing');
+                              setReturnToLeadForm(true);
+                              setReturnToLeadStep(step);
+                              setLegalModal('terms');
+                            }}
                             className="underline underline-offset-4 hover:text-black transition-colors"
                           >
                             Terms of Service
@@ -1204,10 +1216,18 @@ export default function App() {
                     {legalModal === 'privacy' ? 'Privacy Policy' : 'Terms of Service'}
                   </h2>
                   <button
-                    onClick={() => setLegalModal(null)}
-                    className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center hover:bg-black hover:text-white transition-all"
+                    onClick={() => {
+                      setLegalModal(null);
+                      if (returnToLeadForm) {
+                        setPhase('form');
+                        setStep(returnToLeadStep);
+                      }
+                      setReturnToLeadForm(false);
+                      setReturnToLeadStep(1);
+                    }}
+                    className="h-8 w-8 md:h-9 md:w-9 flex items-center justify-center text-black/30 hover:text-black transition-colors"
                   >
-                    <X className="w-5 h-5" />
+                    <X className="w-4 h-4 md:w-[18px] md:h-[18px] stroke-[1.5]" />
                   </button>
                 </div>
                 <div className="p-8 overflow-y-auto font-light text-black/60 leading-relaxed space-y-6">
