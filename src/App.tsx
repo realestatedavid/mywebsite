@@ -18,6 +18,7 @@ interface LeadData {
   name: string;
   email: string;
   phone: string;
+  smsConsent: boolean;
 }
 
 interface Testimonial {
@@ -175,10 +176,12 @@ const CLIENTELE_CATEGORIES = [
   }
 ];
 
+const SMS_CONSENT_COPY = `I agree to be contacted by text by David Tran Real Estate. Reply STOP to unsubscribe. Msg/data rates may apply. Msg frequency varies.`;
+
 export default function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [phase, setPhase] = useState<'intro' | 'landing' | 'form' | 'success'>('intro');
-  const [leadData, setLeadData] = useState<LeadData>({ type: null, name: '', email: '', phone: '' });
+  const [leadData, setLeadData] = useState<LeadData>({ type: null, name: '', email: '', phone: '', smsConsent: false });
   const [step, setStep] = useState(1);
   const [activeResource, setActiveResource] = useState<Resource | null>(null);
   const [resourceFormPhase, setResourceFormPhase] = useState<'idle' | 'form' | 'success'>('idle');
@@ -189,11 +192,11 @@ export default function App() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [toast, setToast] = useState<{ message: string; type: 'error' | 'success' } | null>(null);
 
-  // Disable scroll during intro or modal
+  // Disable page scroll while the intro, lead form, or legal modal is active.
   useEffect(() => {
-    if (phase === 'intro' || legalModal) {
+    if (phase === 'intro' || phase === 'form' || legalModal) {
       document.body.style.overflow = 'hidden';
-      if (phase === 'intro') window.scrollTo(0, 0);
+      if (phase === 'intro' || phase === 'form') window.scrollTo(0, 0);
     } else {
       document.body.style.overflow = 'unset';
     }
@@ -373,7 +376,8 @@ export default function App() {
           from_email: leadData.email,
           phone: leadData.phone,
           lead_type: leadData.type,
-          message: `New ${leadData.type} lead from website.`,
+          sms_opt_in: leadData.smsConsent ? 'Yes' : 'No',
+          message: `New ${leadData.type} lead from website. SMS consent: ${leadData.smsConsent ? 'Yes' : 'No'}.`,
           to_name: 'David Tran',
         },
         publicKey
@@ -456,7 +460,7 @@ export default function App() {
           </motion.div>
         )}
       </AnimatePresence>
-      <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
+      <section className="relative w-full h-screen min-h-[100svh] flex justify-center items-center overflow-hidden">
         {/* Globe Canvas Background */}
         <div className={`absolute inset-0 flex items-center justify-center transition-all duration-[1500ms] ease-in-out ${phase !== 'intro' ? 'opacity-0 scale-125 pointer-events-none' : 'opacity-100'}`}>
           <div className="relative w-[800px] h-[800px] max-w-[150vw] translate-x-0">
@@ -479,13 +483,13 @@ export default function App() {
               exit={{ opacity: 0, scale: 0.98 }}
               className="z-20 w-full h-full max-w-7xl mx-auto px-6 flex flex-col justify-center items-center text-center absolute inset-0 pointer-events-none"
             >
-              <div className="max-w-4xl pt-32 md:pt-0" style={{ pointerEvents: phase === 'landing' ? 'auto' : 'none' }}>
-                <div className="space-y-8 mb-16 flex flex-col items-center">
+              <div className="max-w-4xl pt-24 md:pt-0" style={{ pointerEvents: phase === 'landing' ? 'auto' : 'none' }}>
+                <div className="space-y-6 md:space-y-8 mb-12 md:mb-16 flex flex-col items-center">
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 1.0, duration: 0.8 }}
-                    className="text-[11px] uppercase tracking-[0.4em] text-black/40 font-semibold"
+                    className="text-[11px] md:text-[12px] uppercase tracking-[0.4em] text-black/50 md:text-black/55 font-semibold"
                   >
                     David Tran | Real Estate
                   </motion.div>
@@ -493,7 +497,7 @@ export default function App() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 1.5, duration: 1.2, ease: "easeOut" }}
-                    className="text-6xl md:text-8xl lg:text-9xl font-light tracking-tight leading-[0.85] max-w-4xl"
+                    className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light tracking-tight leading-[0.88] md:leading-[0.87] max-w-4xl"
                   >
                     Make decisions that <br />
                     <span className="italic font-serif">compound</span> over time.
@@ -504,7 +508,7 @@ export default function App() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 3.5, duration: 0.8, ease: "easeOut" }}
-                  className="flex flex-col items-center mb-24"
+                  className="flex flex-col items-center mb-18 md:mb-24"
                 >
                 <motion.button
                   onClick={() => setPhase('form')}
@@ -529,11 +533,29 @@ export default function App() {
               key="form-container"
               initial={{ opacity: 0, scale: 0.9, y: 0 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="z-20 w-full max-w-xl px-6"
+              exit={{ opacity: 0, scale: 0.995 }}
+              transition={{ duration: 0.08, ease: "easeOut" }}
+              className="fixed inset-0 z-30 flex items-start justify-center overflow-y-auto px-4 py-6 md:px-6 md:py-10 bg-white/70 backdrop-blur-md"
+              onClick={() => {
+                setPhase('landing');
+                setStep(1);
+              }}
             >
-              <div className="bg-white/60 backdrop-blur-3xl border border-black/10 rounded-[2.5rem] p-8 md:p-12 shadow-2xl relative overflow-hidden">
+              <div
+                className="w-full max-w-xl bg-white/80 backdrop-blur-3xl border border-black/10 rounded-[2.5rem] p-8 md:p-12 shadow-2xl relative overflow-y-auto max-h-[calc(100svh-2rem)] md:max-h-[calc(100svh-4rem)]"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPhase('landing');
+                    setStep(1);
+                  }}
+                  className="absolute top-5 right-5 md:top-6 md:right-6 w-10 h-10 rounded-full bg-black/5 flex items-center justify-center hover:bg-black hover:text-white transition-all z-20"
+                  aria-label="Close lead form"
+                >
+                  <X className="w-5 h-5" />
+                </button>
                 {step === 1 ? (
                   <div className="space-y-8">
                     <div className="space-y-2">
@@ -631,6 +653,42 @@ export default function App() {
                             }`}
                         />
                       </div>
+
+                      <div className="rounded-2xl border border-black/10 bg-black/[0.02] px-4 py-4 md:px-5 md:py-5 space-y-2.5">
+                        <label className="flex items-start gap-3 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={leadData.smsConsent}
+                            onChange={(e) => {
+                              setLeadData(prev => ({ ...prev, smsConsent: e.target.checked }));
+                            }}
+                            className="mt-1 h-4 w-4 rounded border-black/20 text-black focus:ring-black"
+                          />
+                          <span className="text-[10px] md:text-[10.5px] uppercase tracking-[0.18em] text-black/60 font-semibold leading-relaxed">
+                            Text Message Opt-In (Optional)
+                          </span>
+                        </label>
+
+                        <p className="text-[12px] md:text-[13px] leading-6 text-black/55 font-light">
+                          {SMS_CONSENT_COPY}{' '}
+                          <button
+                            type="button"
+                            onClick={() => setLegalModal('privacy')}
+                            className="underline underline-offset-4 hover:text-black transition-colors"
+                          >
+                            Privacy Policy
+                          </button>{' '}
+                          and{' '}
+                          <button
+                            type="button"
+                            onClick={() => setLegalModal('terms')}
+                            className="underline underline-offset-4 hover:text-black transition-colors"
+                          >
+                            Terms of Service
+                          </button>
+                          .
+                        </p>
+                      </div>
                     </div>
 
                     <button
@@ -669,7 +727,7 @@ export default function App() {
                 onClick={() => {
                   setPhase('landing');
                   setStep(1);
-                  setLeadData({ type: null, name: '', email: '', phone: '' });
+                  setLeadData({ type: null, name: '', email: '', phone: '', smsConsent: false });
                 }}
                 className="text-black/40 hover:text-black text-sm transition-colors border-b border-black/10 pb-1"
               >
@@ -685,12 +743,12 @@ export default function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 2 }}
-            className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-black/30 cursor-pointer group z-30"
+            className="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-black/30 cursor-pointer group z-30"
             onClick={() => {
               document.getElementById('testimonials')?.scrollIntoView({ behavior: 'smooth' });
             }}
           >
-            <span className="text-[9px] uppercase tracking-[0.5em] group-hover:text-black transition-colors font-bold">Scroll to Explore</span>
+            <span className="text-[8px] md:text-[9px] uppercase tracking-[0.4em] md:tracking-[0.5em] group-hover:text-black transition-colors font-bold whitespace-nowrap">Scroll to Explore</span>
             <motion.div
               animate={{ y: [0, 5, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
@@ -701,17 +759,17 @@ export default function App() {
       </section>
 
       {/* Content Sections */}
-      <div className={`transition-opacity duration-1000 ${phase === 'intro' ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+      <div className={`transition-opacity duration-75 ${phase === 'intro' || phase === 'form' ? 'opacity-0 pointer-events-none select-none' : 'opacity-100'}`}>
 
         {/* Testimonials Section */}
-        <section id="testimonials" className="pt-32 pb-20 px-6 bg-white relative overflow-hidden">
-          <div className="max-w-4xl mx-auto space-y-16">
-            <div className="space-y-4 text-center">
+        <section id="testimonials" className="pt-20 md:pt-28 pb-16 md:pb-20 px-5 md:px-6 bg-white relative overflow-hidden">
+          <div className="max-w-4xl mx-auto space-y-12 md:space-y-16">
+            <div className="space-y-3 md:space-y-4 text-center">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-[12px] uppercase tracking-[0.6em] text-black/40"
+                className="text-[11px] md:text-[12px] uppercase tracking-[0.45em] md:tracking-[0.6em] text-black/40"
               >
                 Client Experiences
               </motion.div>
@@ -720,13 +778,13 @@ export default function App() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.1 }}
-                className="text-5xl md:text-6xl font-light tracking-tight"
+                className="text-4xl sm:text-5xl md:text-6xl font-light tracking-tight leading-[0.95]"
               >
                 What clients <span className="italic font-serif">are saying.</span>
               </motion.h2>
             </div>
 
-            <div className="relative min-h-[400px] flex items-center">
+            <div className="relative min-h-[360px] md:min-h-[400px] flex items-center">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={TESTIMONIALS[testimonialIndex].id}
@@ -734,9 +792,9 @@ export default function App() {
                   animate={{ opacity: 1, x: 0, scale: 1 }}
                   exit={{ opacity: 0, x: -20, scale: 0.98 }}
                   transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                  className="w-full p-12 md:p-16 rounded-[40px] bg-black/[0.02] border border-black/5 flex flex-col justify-between h-full relative z-10"
+                  className="w-full p-8 sm:p-10 md:p-16 rounded-[32px] md:rounded-[40px] bg-black/[0.02] border border-black/5 flex flex-col justify-between h-full relative z-10"
                 >
-                  <div className="space-y-8">
+                  <div className="space-y-6 md:space-y-8">
                     <div className="flex justify-between items-start">
                       <div className="flex gap-1">
                         {[...Array(TESTIMONIALS[testimonialIndex].rating)].map((_, i) => (
@@ -748,12 +806,12 @@ export default function App() {
                       </div>
                     </div>
 
-                    <p className="text-base md:text-lg font-light leading-relaxed text-black/80 italic">
+                    <p className="text-[15px] sm:text-base md:text-lg font-light leading-8 md:leading-relaxed text-black/80 italic">
                       "{TESTIMONIALS[testimonialIndex].content}"
                     </p>
                   </div>
 
-                  <div className="mt-12 pt-8 border-t border-black/5 flex justify-between items-end">
+                  <div className="mt-8 md:mt-12 pt-6 md:pt-8 border-t border-black/5 flex justify-between items-end">
                     <div>
                       <div className="font-medium text-xl">{TESTIMONIALS[testimonialIndex].author}</div>
                       <div className="text-sm text-black/40 flex flex-wrap items-center gap-2 mt-2">
@@ -767,7 +825,7 @@ export default function App() {
               </AnimatePresence>
 
               {/* Navigation Buttons */}
-              <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 flex items-center gap-4">
+              <div className="absolute -bottom-16 md:-bottom-18 left-1/2 -translate-x-1/2 flex items-center gap-4 md:gap-5">
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
@@ -1162,7 +1220,7 @@ export default function App() {
                       </section>
                       <section className="space-y-3">
                         <h3 className="text-black font-medium uppercase text-xs tracking-widest">2. Use of Information</h3>
-                        <p>We use the information we collect to provide, maintain, and improve our services, to communicate with you about real estate opportunities, and to send you requested resources.</p>
+                        <p>We use the information we collect to provide, maintain, and improve our services, to communicate with you about real estate opportunities, and to send you requested resources. If you opt in, we may also contact you by call or text message about real estate services.</p>
                       </section>
                       <section className="space-y-3">
                         <h3 className="text-black font-medium uppercase text-xs tracking-widest">3. Data Sharing</h3>
@@ -1170,7 +1228,11 @@ export default function App() {
                       </section>
                       <section className="space-y-3">
                         <h3 className="text-black font-medium uppercase text-xs tracking-widest">4. Your Choices</h3>
-                        <p>You may opt out of receiving promotional communications from us by following the instructions in those communications or by contacting us directly.</p>
+                        <p>You may opt out of receiving promotional communications from us by following the instructions in those communications or by contacting us directly. You may opt out of text messages at any time by replying STOP, and reply HELP for additional assistance.</p>
+                      </section>
+                      <section className="space-y-3">
+                        <h3 className="text-black font-medium uppercase text-xs tracking-widest">5. Mobile Messaging</h3>
+                        <p>Mobile information will not be shared with third parties or affiliates for marketing or promotional purposes. Message and data rates may apply. Message frequency may vary based on your interaction with our team and services.</p>
                       </section>
                     </>
                   ) : (
