@@ -45,6 +45,9 @@ interface CaseStudy {
   audience: string;
   location: string;
   image?: string;
+  secondaryImage?: string;
+  beforeImages?: string[];
+  afterImages?: string[];
   imageLabel: string;
   imageHint: string;
   metrics: Array<{
@@ -55,8 +58,13 @@ interface CaseStudy {
   solution: string;
   results: string[];
   examples?: Array<{
-    title: string;
-    detail: string;
+    address: string;
+    location: string;
+    buyPrice: string;
+    sellPrice: string;
+    profit: string;
+    image?: string;
+    notes?: string;
   }>;
 }
 
@@ -150,21 +158,22 @@ const CASE_STUDIES: CaseStudy[] = [
     audience: 'Developer client',
     location: 'Wakefield',
     image: '/images/wakefield-16-unit.jpg',
+    secondaryImage: '/images/BB39E4E0-29C8-44C0-B695-D23E9CFBC7D6.jpg',
     imageLabel: '16-Unit Wakefield Apartment Building',
     imageHint: 'Wakefield 16-unit project during construction and pre-delivery lease-up.',
     metrics: [
       { value: '100%', label: 'Leased before CO' },
       { value: '$590K', label: 'Annualized rental income' },
-      { value: 'No downtime', label: 'CO to cash flow stabilization' },
+      { value: 'No downtime', label: 'CO to cash flow' },
       { value: '16 Units', label: 'Wakefield asset' },
     ],
-    challenge: 'A 16-unit project approaching delivery could not afford a slow lease-up after certificates of occupancy were issued, especially with the certificate of occupancy delayed multiple times. The developer needed demand created before completion, tenant expectations managed clearly, and a plan that reduced the gap between CO issuance and stabilized cash flow.',
-    solution: 'We drove leasing activity during active construction, used renderings and in-progress marketing to communicate the vision, coordinated showings before delivery, and managed tenant expectations around timing so signed demand translated into revenue momentum the moment the project was ready.',
+    challenge: 'A 16-unit project approaching delivery could not afford a slow lease-up, especially with the **certificate of occupancy delayed multiple times**. The developer needed demand created before completion, tenant expectations managed clearly, and a plan that compressed the gap between CO issuance and stabilized cash flow.',
+    solution: 'We drove **leasing activity during active construction**, used renderings and in-progress marketing to communicate the vision, coordinated showings before delivery, and managed tenant expectations around timing so signed demand translated into revenue momentum the moment the project was ready.',
     results: [
-      '100% of the building was leased before certificates of occupancy were issued.',
-      '$590,000 in annualized rental income was committed before project delivery.',
-      'There was effectively no downtime between CO issuance and cash flow stabilization, which protected the lease-up curve and reduced vacancy exposure.',
-      'Showings during active construction, rendering-led marketing, and proactive timeline management helped keep tenant expectations aligned while the project moved toward completion.',
+      '100% leased before certificates of occupancy were issued.',
+      '**$590,000 in annualized rental income** committed before project delivery.',
+      'Effectively **no downtime between CO issuance and cash flow stabilization**, protecting the lease-up curve and reducing vacancy exposure.',
+      'Showings during active construction and proactive timeline management kept tenant expectations aligned throughout the CO delays.',
     ],
   },
   {
@@ -190,16 +199,18 @@ const CASE_STUDIES: CaseStudy[] = [
     ],
     examples: [
       {
-        title: 'Example Sold Property 01',
-        detail: 'Add photo, town, acquisition price, exit price, and profit summary.',
+        address: '41 School St, Unit A',
+        location: 'Lowell',
+        buyPrice: '$153K',
+        sellPrice: '$285K',
+        profit: '$132K',
       },
       {
-        title: 'Example Sold Property 02',
-        detail: 'Add before-and-after visuals plus the return profile for this flip.',
-      },
-      {
-        title: 'Example Sold Property 03',
-        detail: 'Add a quick breakdown of timeline, scope, and final investor outcome.',
+        address: '79 Dana St, Unit 3',
+        location: 'Cambridge',
+        buyPrice: '$475K',
+        sellPrice: '$550K',
+        profit: '$75K',
       },
     ],
   },
@@ -210,20 +221,49 @@ const CASE_STUDIES: CaseStudy[] = [
     summary: 'This was more than a purchase. We helped the client acquire the property, shape the renovation strategy, and optimize the rental plan so the deal performed like a true BRRRR execution from start to refinance.',
     audience: 'Acquisition + renovation + rental optimization',
     location: 'Roslindale',
+    beforeImages: ['/images/IMG_1820.jpg', '/images/roslindale-before.jpg'],
+    afterImages: ['/images/8I3A0647.jpeg', '/images/IMG_4729.JPG'],
     imageLabel: 'Roslindale BRRRR Property',
-    imageHint: 'Add before-and-after renovation photos here, along with refinance or stabilized rent visuals if you want them featured.',
+    imageHint: 'Before and after renovation.',
     metrics: [
       { value: '$540K', label: 'Purchase price' },
       { value: '$300K', label: 'Renovation' },
       { value: '$1.1M', label: 'Post-renovation value' },
       { value: '110%', label: 'Cash-on-cash return' },
     ],
-    challenge: 'The client needed more than help finding a property. The opportunity had to work as a BRRRR deal, which meant buying well, renovating intelligently, and building a rental strategy strong enough to support long-term value and a successful cash-out refinance.',
-    solution: 'We stayed involved across the full strategy, helping the client buy the asset, think through the renovation with the end value in mind, and optimize the rent plan so the property was positioned for both income and equity creation.',
+    challenge: 'The client needed more than help finding the property. Executing a BRRRR in Boston meant buying right, managing a full renovation with the right contractors, and building a rental strategy strong enough to support a cash-out refinance. Mid-renovation, an unexpected budget issue forced a pivot in strategy that could have derailed the entire deal.',
+    solution: 'We stepped in across the full execution — helping identify and manage the right contractors, keeping the renovation on track, and putting rental systems in place that maximized income across the units. When the budget challenge came up, we adjusted the strategy without losing sight of the end goal: a refinance that worked and a deal that still performed.',
     results: [
       'Purchased for $540,000 and renovated with roughly $300,000 invested into the project.',
-      'The property reached an estimated value of about $1.1M, creating meaningful equity after the repositioning.',
-      'After cash-out refinancing, the client was sitting at roughly a 110% cash-on-cash return with equity still in the deal.',
+      'The property reached an estimated value of about $1.1M after the repositioning.',
+      'Successfully executed a cash-out refinance — a true BRRRR from acquisition to stabilization.',
+      'After refinancing, the client retained approximately $250,000 of equity still in the property.',
+      'Cash-on-cash return came in at roughly 110% on the capital invested.',
+    ],
+  },
+  {
+    id: 'dorchester-house-hack',
+    label: 'House Hack',
+    title: 'A 22-year-old bought a $913,000 Dorchester property with less than $30K down.',
+    summary: '',
+    audience: 'First-time investor',
+    location: 'Dorchester',
+    image: '/images/dorchester-garage.jpg',
+    imageLabel: 'The 1,500 sq ft rentable garage',
+    imageHint: 'The 1,500 sq ft garage that unlocked the cash flow on this deal.',
+    metrics: [
+      { value: '$913K', label: 'Purchase price' },
+      { value: '<$30K', label: 'Down payment' },
+      { value: '$48K/yr', label: 'Annual cash flow' },
+      { value: '685%', label: 'Cash-on-cash return' },
+    ],
+    challenge: 'Finding a property that penciled out with very limited capital in one of the most expensive markets in the country. Boston does not leave much room for error, and the client needed a deal where the numbers worked from day one without a large cash position.',
+    solution: 'We found a unique multi-unit property with a 1,500-square-foot garage that could be rented out as an additional income stream. The client house hacked the property and applied specific rental strategies across the units to maximize income, which is what made the cash flow numbers possible at this price point.',
+    results: [
+      'Acquired a $913,000 multi-unit property with less than $30,000 down.',
+      'Net cash out of pocket at closing came in at approximately $7,000 after credits.',
+      'The property generates $48,000 in annual cash flow — a 685% cash-on-cash return on the $7,000 invested.',
+      'At 22 years old, the client now owns a cash-flowing Boston asset with significant long-term equity upside.',
     ],
   },
 ];
@@ -283,6 +323,13 @@ const CLIENTELE_CATEGORIES = [
     ]
   }
 ];
+
+const renderText = (text: string) =>
+  text.split(/(\*\*[^*]+\*\*)/).map((part, i) =>
+    part.startsWith('**') && part.endsWith('**')
+      ? <strong key={i} className="text-black/85 font-semibold">{part.slice(2, -2)}</strong>
+      : part
+  );
 
 const SMS_CONSENT_COPY = `I agree to receive text messages from David Tran and Rental Launch LLC about my inquiry and real estate services. Consent is not a condition of purchase. Reply STOP to unsubscribe. Reply HELP for help. Message frequency varies. Message and data rates may apply.`;
 const CALENDLY_URL = 'https://calendly.com/rentallaunch/30min';
@@ -811,55 +858,6 @@ export default function App() {
               </motion.p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 max-w-6xl mx-auto">
-              {CASE_STUDIES.map((study, index) => {
-                const isActive = study.id === activeCaseStudy.id;
-
-                return (
-                  <motion.button
-                    key={study.id}
-                    type="button"
-                    initial={{ opacity: 0, y: 24 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 }}
-                    whileHover={{ y: -6, transition: { duration: 0.2 } }}
-                    whileTap={{ scale: 0.99 }}
-                    onClick={() => setActiveCaseStudyId(study.id)}
-                    className={`rounded-[32px] border p-7 md:p-8 text-center transition-all duration-300 ${isActive
-                      ? 'bg-black text-white border-black shadow-[0_24px_80px_rgba(0,0,0,0.16)]'
-                      : 'bg-black/[0.02] text-black border-black/8 hover:border-black/20 hover:bg-white hover:shadow-[0_18px_60px_rgba(0,0,0,0.06)]'
-                      }`}
-                  >
-                    <div className="space-y-5">
-                      <div className={`text-[10px] uppercase tracking-[0.35em] font-semibold ${isActive ? 'text-white/60' : 'text-black/35'}`}>
-                        {study.label}
-                      </div>
-                      <h3 className="text-2xl md:text-[2rem] font-light tracking-tight leading-tight">
-                        {study.title}
-                      </h3>
-                      <p className={`font-light leading-7 ${isActive ? 'text-white/78' : 'text-black/55'}`}>
-                        {study.summary}
-                      </p>
-                      <div className="flex flex-wrap justify-center gap-3 pt-2">
-                        {study.metrics.map((metric) => (
-                          <div
-                            key={`${study.id}-${metric.label}`}
-                            className={`min-w-[120px] rounded-full px-4 py-2 ${isActive ? 'bg-white/10 text-white' : 'bg-white border border-black/8 text-black'}`}
-                          >
-                            <div className="text-sm font-semibold tracking-tight">{metric.value}</div>
-                            <div className={`text-[9px] uppercase tracking-[0.22em] ${isActive ? 'text-white/60' : 'text-black/40'}`}>
-                              {metric.label}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </motion.button>
-                );
-              })}
-            </div>
-
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeCaseStudy.id}
@@ -883,12 +881,38 @@ export default function App() {
                   </div>
 
                   <div className="max-w-4xl mx-auto">
-                    {activeCaseStudy.image ? (
-                      <img
-                        src={activeCaseStudy.image}
-                        alt={activeCaseStudy.imageLabel}
-                        className="w-full aspect-[16/9] object-cover rounded-[32px] border border-black/8"
-                      />
+                    {activeCaseStudy.beforeImages && activeCaseStudy.afterImages ? (
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="space-y-2">
+                          <div className="text-[10px] uppercase tracking-[0.3em] font-semibold text-black/35 text-center">Before</div>
+                          <div className="space-y-2">
+                            {activeCaseStudy.beforeImages.map((src, i) => (
+                              <img key={i} src={src} alt={`Before ${i + 1}`} className="w-full object-cover rounded-[20px] border border-black/8" />
+                            ))}
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <div className="text-[10px] uppercase tracking-[0.3em] font-semibold text-black/35 text-center">After</div>
+                          <div className="space-y-2">
+                            {activeCaseStudy.afterImages.map((src, i) => (
+                              <img key={i} src={src} alt={`After ${i + 1}`} className="w-full object-cover rounded-[20px] border border-black/8" />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ) : activeCaseStudy.image ? (
+                      activeCaseStudy.secondaryImage ? (
+                        <div className="grid grid-cols-[2fr_1fr] gap-3">
+                          <img src={activeCaseStudy.image} alt={activeCaseStudy.imageLabel} className="w-full h-72 md:h-96 object-cover rounded-[24px] border border-black/8" />
+                          <img src={activeCaseStudy.secondaryImage} alt="On-site" className="w-full h-72 md:h-96 object-cover rounded-[24px] border border-black/8" />
+                        </div>
+                      ) : (
+                        <img
+                          src={activeCaseStudy.image}
+                          alt={activeCaseStudy.imageLabel}
+                          className="w-full aspect-[16/9] object-cover rounded-[32px] border border-black/8"
+                        />
+                      )
                     ) : (
                       <div className="w-full aspect-[16/9] rounded-[32px] border border-dashed border-black/15 bg-[radial-gradient(circle_at_top,rgba(0,0,0,0.06),rgba(255,255,255,1)_72%)] flex flex-col items-center justify-center px-6 text-center">
                         <div className="text-[10px] uppercase tracking-[0.35em] text-black/35 font-semibold">
@@ -904,76 +928,94 @@ export default function App() {
                     )}
                   </div>
 
-                  <div className="flex flex-wrap justify-center gap-3 md:gap-4">
+                  <div className="flex flex-wrap justify-center gap-2">
                     {activeCaseStudy.metrics.map((metric) => (
                       <div
                         key={`${activeCaseStudy.id}-detail-${metric.label}`}
-                        className="min-w-[140px] rounded-[24px] border border-black/8 bg-white px-5 py-4 text-center"
+                        className="rounded-full border border-black/8 bg-white px-4 py-1.5 flex items-center gap-2"
                       >
-                        <div className="text-xl md:text-2xl font-light tracking-tight">{metric.value}</div>
-                        <div className="mt-1 text-[10px] uppercase tracking-[0.25em] text-black/40 font-semibold">
-                          {metric.label}
-                        </div>
+                        <span className="text-sm font-semibold tracking-tight">{metric.value}</span>
+                        <span className="text-[10px] uppercase tracking-[0.2em] text-black/35">{metric.label}</span>
                       </div>
                     ))}
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
-                    <div className="rounded-[28px] border border-black/8 bg-white p-6 md:p-7 text-center space-y-4">
+                    <div className="rounded-[28px] border border-black/8 bg-white p-6 md:p-7 text-left space-y-4">
                       <div className="text-[10px] uppercase tracking-[0.35em] text-black/35 font-semibold">
                         Challenge
                       </div>
                       <p className="text-black/60 font-light leading-7">
-                        {activeCaseStudy.challenge}
+                        {renderText(activeCaseStudy.challenge)}
                       </p>
                     </div>
 
-                    <div className="rounded-[28px] border border-black/8 bg-white p-6 md:p-7 text-center space-y-4">
+                    <div className="rounded-[28px] border border-black/8 bg-white p-6 md:p-7 text-left space-y-4">
                       <div className="text-[10px] uppercase tracking-[0.35em] text-black/35 font-semibold">
                         Solution
                       </div>
                       <p className="text-black/60 font-light leading-7">
-                        {activeCaseStudy.solution}
+                        {renderText(activeCaseStudy.solution)}
                       </p>
                     </div>
 
-                    <div className="rounded-[28px] border border-black/8 bg-white p-6 md:p-7 text-center space-y-4">
+                    <div className="rounded-[28px] border border-black/8 bg-white p-6 md:p-7 text-left space-y-4">
                       <div className="text-[10px] uppercase tracking-[0.35em] text-black/35 font-semibold">
                         Results
                       </div>
-                      <div className="space-y-3">
+                      <ul className="space-y-3">
                         {activeCaseStudy.results.map((result) => (
-                          <p key={result} className="text-black/60 font-light leading-7">
-                            {result}
-                          </p>
+                          <li key={result} className="flex items-start gap-2.5">
+                            <CheckCircle2 className="w-4 h-4 text-black/25 mt-0.5 shrink-0" />
+                            <span className="text-black/60 font-light leading-6 text-sm">{renderText(result)}</span>
+                          </li>
                         ))}
-                      </div>
+                      </ul>
                     </div>
                   </div>
 
                   {activeCaseStudy.examples && activeCaseStudy.examples.length > 0 && (
                     <div className="space-y-5">
-                      <div className="space-y-2">
-                        <div className="text-[10px] uppercase tracking-[0.35em] text-black/35 font-semibold">
-                          Sold Property Examples
-                        </div>
-                        <p className="text-black/45 font-light max-w-2xl mx-auto leading-relaxed">
-                          This row is ready for the actual flips you want to feature with address, photos, purchase and exit numbers, and the profit story for each deal.
-                        </p>
+                      <div className="text-[10px] uppercase tracking-[0.35em] text-black/35 font-semibold">
+                        Deals
                       </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                         {activeCaseStudy.examples.map((example) => (
                           <div
-                            key={example.title}
-                            className="rounded-[24px] border border-dashed border-black/15 bg-white/80 p-5 md:p-6 text-center space-y-3"
+                            key={`${example.address}-${example.location}`}
+                            className="rounded-[24px] border border-black/8 bg-white overflow-hidden text-left"
                           >
-                            <div className="text-sm uppercase tracking-[0.25em] text-black/35 font-semibold">
-                              {example.title}
+                            {example.image ? (
+                              <img src={example.image} alt={example.address} className="w-full aspect-video object-cover" />
+                            ) : (
+                              <div className="w-full aspect-video bg-black/[0.03] border-b border-black/6 flex items-center justify-center">
+                                <span className="text-[10px] uppercase tracking-[0.3em] text-black/20">No photo yet</span>
+                              </div>
+                            )}
+                            <div className="p-5 space-y-4">
+                              <div>
+                                <div className="font-medium tracking-tight">{example.address}</div>
+                                <div className="text-[11px] uppercase tracking-[0.3em] text-black/35 mt-0.5">{example.location}</div>
+                              </div>
+                              <div className="flex items-center gap-3">
+                                <div className="flex-1 rounded-xl bg-black/[0.03] px-3 py-2 text-center">
+                                  <div className="text-[10px] uppercase tracking-[0.2em] text-black/35">Bought</div>
+                                  <div className="font-semibold text-sm mt-0.5">{example.buyPrice}</div>
+                                </div>
+                                <ArrowRight className="w-3 h-3 text-black/20 shrink-0" />
+                                <div className="flex-1 rounded-xl bg-black/[0.03] px-3 py-2 text-center">
+                                  <div className="text-[10px] uppercase tracking-[0.2em] text-black/35">Sold</div>
+                                  <div className="font-semibold text-sm mt-0.5">{example.sellPrice}</div>
+                                </div>
+                              </div>
+                              <div className="rounded-xl bg-black text-white px-3 py-2 text-center">
+                                <div className="text-[10px] uppercase tracking-[0.2em] text-white/50">Gross Profit</div>
+                                <div className="font-semibold mt-0.5">{example.profit}</div>
+                              </div>
+                              {example.notes && (
+                                <p className="text-black/45 font-light text-sm leading-6">{example.notes}</p>
+                              )}
                             </div>
-                            <p className="text-black/50 font-light leading-6">
-                              {example.detail}
-                            </p>
                           </div>
                         ))}
                       </div>
@@ -982,6 +1024,34 @@ export default function App() {
                 </div>
               </motion.div>
             </AnimatePresence>
+
+            <div className="space-y-5 max-w-5xl mx-auto">
+              <div className="text-[10px] uppercase tracking-[0.45em] text-black/30 text-center font-semibold">More Case Studies</div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {CASE_STUDIES.filter(s => s.id !== activeCaseStudy.id).map((study) => (
+                  <motion.button
+                    key={study.id}
+                    type="button"
+                    whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => {
+                      setActiveCaseStudyId(study.id);
+                      document.getElementById('case-studies')?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    className="rounded-[28px] border border-black/8 bg-black/[0.02] hover:bg-white hover:border-black/20 hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)] p-5 text-left transition-all duration-300"
+                  >
+                    <div className="space-y-3">
+                      <div className="text-[10px] uppercase tracking-[0.35em] font-semibold text-black/30">{study.label}</div>
+                      <p className="font-light tracking-tight leading-snug text-black/75">{study.title}</p>
+                      <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.25em] text-black/35 font-semibold">
+                        View case study <ArrowRight className="w-3 h-3" />
+                      </div>
+                    </div>
+                  </motion.button>
+                ))}
+              </div>
+            </div>
+
           </div>
         </section>
 
