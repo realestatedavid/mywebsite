@@ -167,13 +167,12 @@ const CASE_STUDIES: CaseStudy[] = [
       { value: 'No downtime', label: 'CO to cash flow' },
       { value: '16 Units', label: 'Wakefield asset' },
     ],
-    challenge: 'A 16-unit project approaching delivery could not afford a slow lease-up, especially with the **certificate of occupancy delayed multiple times**. The developer needed demand created before completion, tenant expectations managed clearly, and a plan that compressed the gap between CO issuance and stabilized cash flow.',
-    solution: 'We drove **leasing activity during active construction**, used renderings and in-progress marketing to communicate the vision, coordinated showings before delivery, and managed tenant expectations around timing so signed demand translated into revenue momentum the moment the project was ready.',
+    challenge: 'A 16-unit project that could not afford a slow lease-up — especially with the **certificate of occupancy delayed multiple times**. Demand had to be built before delivery, with no gap between CO and stabilized cash flow.',
+    solution: 'We drove **leasing activity during active construction**, used renderings to communicate the vision before units existed, and managed tenant expectations so signed demand was ready to convert the moment the project delivered.',
     results: [
-      '100% leased before certificates of occupancy were issued.',
-      '**$590,000 in annualized rental income** committed before project delivery.',
-      'Effectively **no downtime between CO issuance and cash flow stabilization**, protecting the lease-up curve and reducing vacancy exposure.',
-      'Showings during active construction and proactive timeline management kept tenant expectations aligned throughout the CO delays.',
+      '**100% leased before CO** was issued.',
+      '**$590,000 in annualized rental income** locked in before delivery.',
+      'Effectively **no downtime between CO and cash flow stabilization**.',
     ],
   },
   {
@@ -190,12 +189,11 @@ const CASE_STUDIES: CaseStudy[] = [
       { value: 'Buy + Sell', label: 'Full-cycle support' },
       { value: 'Investor', label: 'Client type' },
     ],
-    challenge: 'Investors need more than a lead on a property. They need acquisitions worth pursuing, underwriting grounded in resale reality, and an exit plan that protects profitability once the renovation is complete.',
-    solution: 'We help source flip opportunities on the acquisition side, evaluate the deal through a resale lens, and then bring the same strategic thinking back at exit so the investor is supported from purchase through sale.',
+    challenge: 'Investors need more than a lead. They need **acquisitions that underwrite correctly**, evaluated through a resale lens from the start — not just at exit.',
+    solution: 'We source the deal, stress-test it against the exit before buying, and stay involved through the sale. **One partner across the full cycle** means tighter decisions and less left on the table.',
     results: [
-      'Average cash-on-cash return of about 60% across the flip examples being highlighted here.',
-      'Clients get a tighter full-cycle process by working with one growth-minded partner on both the acquisition and disposition sides.',
-      'The section is ready to show purchase price, renovation investment, sale price, and profit story as soon as you add each property example.',
+      '**~60% average cash-on-cash return** across completed flips.',
+      'Full-cycle coverage — **acquisition through disposition** with the same strategic lens.',
     ],
     examples: [
       {
@@ -231,14 +229,12 @@ const CASE_STUDIES: CaseStudy[] = [
       { value: '$1.1M', label: 'Post-renovation value' },
       { value: '110%', label: 'Cash-on-cash return' },
     ],
-    challenge: 'The client needed more than help finding the property. Executing a BRRRR in Boston meant buying right, managing a full renovation with the right contractors, and building a rental strategy strong enough to support a cash-out refinance. Mid-renovation, an unexpected budget issue forced a pivot in strategy that could have derailed the entire deal.',
-    solution: 'We stepped in across the full execution — helping identify and manage the right contractors, keeping the renovation on track, and putting rental systems in place that maximized income across the units. When the budget challenge came up, we adjusted the strategy without losing sight of the end goal: a refinance that worked and a deal that still performed.',
+    challenge: 'A true BRRRR in Boston requires buying right, executing the renovation with the right contractors, and building a rental strategy strong enough to hold up at refinance. When an **unexpected budget issue forced a mid-renovation pivot**, the deal could have stalled entirely.',
+    solution: 'We managed the contractor process, kept the renovation on track, and built a **rental system that maximized income across all units** — making the refinance numbers work despite the setback.',
     results: [
-      'Purchased for $540,000 and renovated with roughly $300,000 invested into the project.',
-      'The property reached an estimated value of about $1.1M after the repositioning.',
-      'Successfully executed a cash-out refinance — a true BRRRR from acquisition to stabilization.',
-      'After refinancing, the client retained approximately $250,000 of equity still in the property.',
-      'Cash-on-cash return came in at roughly 110% on the capital invested.',
+      '**$540K → $1.1M** after a $300K renovation.',
+      '**True BRRRR executed** — successful cash-out refinance from acquisition to stabilization.',
+      'Client retained **~$250K equity** at a **110% cash-on-cash return**.',
     ],
   },
   {
@@ -257,13 +253,12 @@ const CASE_STUDIES: CaseStudy[] = [
       { value: '$48K/yr', label: 'Annual cash flow' },
       { value: '685%', label: 'Cash-on-cash return' },
     ],
-    challenge: 'Finding a property that penciled out with very limited capital in one of the most expensive markets in the country. Boston does not leave much room for error, and the client needed a deal where the numbers worked from day one without a large cash position.',
-    solution: 'We found a unique multi-unit property with a 1,500-square-foot garage that could be rented out as an additional income stream. The client house hacked the property and applied specific rental strategies across the units to maximize income, which is what made the cash flow numbers possible at this price point.',
+    challenge: '**Getting into a $913K Boston property with almost no capital.** The deal had to work from day one — Boston doesn\'t leave room for deals that need time to perform.',
+    solution: 'We found a unique multi-unit with a **1,500 sq ft rentable garage** as a standalone income stream. The client house hacked and applied targeted rental strategies across every unit to maximize cash flow.',
     results: [
-      'Acquired a $913,000 multi-unit property with less than $30,000 down.',
-      'Net cash out of pocket at closing came in at approximately $7,000 after credits.',
-      'The property generates $48,000 in annual cash flow — a 685% cash-on-cash return on the $7,000 invested.',
-      'At 22 years old, the client now owns a cash-flowing Boston asset with significant long-term equity upside.',
+      '**$913K property with less than $30K down** — net out of pocket at closing was ~$7,000.',
+      '**$48K annual cash flow** — a **685% cash-on-cash return** on $7K invested.',
+      'At 22, the client owns a **cash-flowing Boston asset** with long-term equity upside.',
     ],
   },
 ];
@@ -828,35 +823,7 @@ export default function App() {
         <section id="case-studies" className="py-24 md:py-32 px-6 bg-white border-t border-black/5 relative overflow-hidden">
           <div className="absolute inset-x-0 top-0 h-48 bg-[radial-gradient(circle_at_top,rgba(0,0,0,0.06),transparent_65%)]" />
 
-          <div className="max-w-6xl mx-auto space-y-14 md:space-y-16 relative z-10">
-            <div className="max-w-4xl mx-auto space-y-5 text-center">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="text-[11px] md:text-[12px] uppercase tracking-[0.45em] md:tracking-[0.6em] text-black/40"
-              >
-                Case Studies
-              </motion.div>
-              <motion.h2
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
-                className="text-4xl sm:text-5xl md:text-6xl font-light tracking-tight leading-[0.95]"
-              >
-                We deliver more than just <span className="italic font-serif">results.</span>
-              </motion.h2>
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.15 }}
-                className="text-black/45 font-light leading-relaxed md:text-lg max-w-3xl mx-auto"
-              >
-                We create partnerships that drive growth, protect momentum, and turn strategy into measurable outcomes. Click into each case study to see the challenge, the solution, and the results.
-              </motion.p>
-            </div>
+          <div className="max-w-6xl mx-auto space-y-10 md:space-y-12 relative z-10">
 
             <AnimatePresence mode="wait">
               <motion.div
