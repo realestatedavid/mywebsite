@@ -887,7 +887,7 @@ export default function App() {
                           <div className="text-[10px] uppercase tracking-[0.3em] font-semibold text-black/35 text-center">Before</div>
                           <div className="space-y-2">
                             {activeCaseStudy.beforeImages.map((src, i) => (
-                              <img key={i} src={src} alt={`Before ${i + 1}`} className="w-full object-cover rounded-[20px] border border-black/8" />
+                              <img key={i} src={src} alt={`Before ${i + 1}`} loading="lazy" className="w-full object-cover rounded-[20px] border border-black/8" />
                             ))}
                           </div>
                         </div>
@@ -895,7 +895,7 @@ export default function App() {
                           <div className="text-[10px] uppercase tracking-[0.3em] font-semibold text-black/35 text-center">After</div>
                           <div className="space-y-2">
                             {activeCaseStudy.afterImages.map((src, i) => (
-                              <img key={i} src={src} alt={`After ${i + 1}`} className="w-full object-cover rounded-[20px] border border-black/8" />
+                              <img key={i} src={src} alt={`After ${i + 1}`} loading="lazy" className="w-full object-cover rounded-[20px] border border-black/8" />
                             ))}
                           </div>
                         </div>
@@ -903,13 +903,14 @@ export default function App() {
                     ) : activeCaseStudy.image ? (
                       activeCaseStudy.secondaryImage ? (
                         <div className="grid grid-cols-[2fr_1fr] gap-3">
-                          <img src={activeCaseStudy.image} alt={activeCaseStudy.imageLabel} className="w-full h-72 md:h-96 object-cover rounded-[24px] border border-black/8" />
-                          <img src={activeCaseStudy.secondaryImage} alt="On-site" className="w-full h-72 md:h-96 object-cover rounded-[24px] border border-black/8" />
+                          <img src={activeCaseStudy.image} alt={activeCaseStudy.imageLabel} loading="lazy" className="w-full h-72 md:h-96 object-cover rounded-[24px] border border-black/8" />
+                          <img src={activeCaseStudy.secondaryImage} alt="On-site" loading="lazy" className="w-full h-72 md:h-96 object-cover rounded-[24px] border border-black/8" />
                         </div>
                       ) : (
                         <img
                           src={activeCaseStudy.image}
                           alt={activeCaseStudy.imageLabel}
+                          loading="lazy"
                           className="w-full aspect-[16/9] object-cover rounded-[32px] border border-black/8"
                         />
                       )
