@@ -8,7 +8,7 @@ import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import gsap from 'gsap';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
-import { ArrowRight, CheckCircle2, Home, Key, TrendingUp, Wallet, BarChart3, Shield, Zap, MapPin, Users, Award, Star, X, Mail, AlertCircle } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Key, TrendingUp, Shield, Zap, Star, X, Mail, AlertCircle } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 
 interface LeadData {
@@ -167,7 +167,7 @@ const CASE_STUDIES: CaseStudy[] = [
       { value: 'No downtime', label: 'CO to cash flow' },
       { value: '16 Units', label: 'Wakefield asset' },
     ],
-    challenge: 'A 16-unit project that could not afford a slow lease-up — especially with the **certificate of occupancy delayed multiple times**. Demand had to be built before delivery, with no gap between CO and stabilized cash flow.',
+    challenge: 'A 16-unit project that could not afford a slow lease-up. The **certificate of occupancy was delayed multiple times**, and demand had to be built before delivery with no gap between CO and stabilized cash flow.',
     solution: 'We drove **leasing activity during active construction**, used renderings to communicate the vision before units existed, and managed tenant expectations so signed demand was ready to convert the moment the project delivered.',
     results: [
       '**100% leased before CO** was issued.',
@@ -189,11 +189,11 @@ const CASE_STUDIES: CaseStudy[] = [
       { value: 'Buy + Sell', label: 'Full-cycle support' },
       { value: 'Investor', label: 'Client type' },
     ],
-    challenge: 'Investors need more than a lead. They need **acquisitions that underwrite correctly**, evaluated through a resale lens from the start — not just at exit.',
+    challenge: 'Investors need more than a lead. They need **acquisitions that underwrite correctly**, evaluated through a resale lens from the start, not just at exit.',
     solution: 'We source the deal, stress-test it against the exit before buying, and stay involved through the sale. **One partner across the full cycle** means tighter decisions and less left on the table.',
     results: [
       '**~60% average cash-on-cash return** across completed flips.',
-      'Full-cycle coverage — **acquisition through disposition** with the same strategic lens.',
+      'Full-cycle coverage from **acquisition through disposition** with the same strategic lens.',
     ],
     examples: [
       {
@@ -209,6 +209,13 @@ const CASE_STUDIES: CaseStudy[] = [
         buyPrice: '$475K',
         sellPrice: '$550K',
         profit: '$75K',
+      },
+      {
+        address: '51 Belmont Ave',
+        location: 'Lynn',
+        buyPrice: '$445K',
+        sellPrice: '$600K',
+        profit: '$155K',
       },
     ],
   },
@@ -230,10 +237,10 @@ const CASE_STUDIES: CaseStudy[] = [
       { value: '110%', label: 'Cash-on-cash return' },
     ],
     challenge: 'A true BRRRR in Boston requires buying right, executing the renovation with the right contractors, and building a rental strategy strong enough to hold up at refinance. When an **unexpected budget issue forced a mid-renovation pivot**, the deal could have stalled entirely.',
-    solution: 'We managed the contractor process, kept the renovation on track, and built a **rental system that maximized income across all units** — making the refinance numbers work despite the setback.',
+    solution: 'We managed the contractor process, kept the renovation on track, and built a **rental system that maximized income across all units**, making the refinance numbers work despite the setback.',
     results: [
-      '**$540K → $1.1M** after a $300K renovation.',
-      '**True BRRRR executed** — successful cash-out refinance from acquisition to stabilization.',
+      '**$540K to $1.1M** after a $300K renovation.',
+      '**True BRRRR executed.** Successful cash-out refinance from acquisition to stabilization.',
       'Client retained **~$250K equity** at a **110% cash-on-cash return**.',
     ],
   },
@@ -253,11 +260,11 @@ const CASE_STUDIES: CaseStudy[] = [
       { value: '$48K/yr', label: 'Annual cash flow' },
       { value: '685%', label: 'Cash-on-cash return' },
     ],
-    challenge: '**Getting into a $913K Boston property with almost no capital.** The deal had to work from day one — Boston doesn\'t leave room for deals that need time to perform.',
+    challenge: '**Getting into a $913K Boston property with almost no capital.** The deal had to work from day one. Boston doesn\'t leave room for deals that need time to perform.',
     solution: 'We found a unique multi-unit with a **1,500 sq ft rentable garage** as a standalone income stream. The client house hacked and applied targeted rental strategies across every unit to maximize cash flow.',
     results: [
-      '**$913K property with less than $30K down** — net out of pocket at closing was ~$7,000.',
-      '**$48K annual cash flow** — a **685% cash-on-cash return** on $7K invested.',
+      '**$913K property, less than $30K down.** Net out of pocket at closing: ~$7,000.',
+      '**$48K annual cash flow**, a **685% cash-on-cash return** on $7K invested.',
       'At 22, the client owns a **cash-flowing Boston asset** with long-term equity upside.',
     ],
   },
@@ -332,15 +339,18 @@ const CALENDLY_URL = 'https://calendly.com/rentallaunch/30min';
 export default function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const heroRef = useRef<HTMLElement>(null);
+  const caseStudyDetailRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress: heroScroll } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
   const heroOpacity = useTransform(heroScroll, [0, 0.6], [1, 0]);
   const heroY = useTransform(heroScroll, [0, 0.6], [0, -40]);
+  const isInitialCaseStudy = useRef(true);
   const [phase, setPhase] = useState<'intro' | 'landing' | 'form' | 'success'>('intro');
   const [leadData, setLeadData] = useState<LeadData>({ name: '', email: '', phone: '', notes: '', smsConsent: false });
   const [activeResource, setActiveResource] = useState<Resource | null>(null);
   const [resourceFormPhase, setResourceFormPhase] = useState<'idle' | 'form' | 'success'>('idle');
   const [resourceFormData, setResourceFormData] = useState({ firstName: '', email: '', segment: '', subscribe: true });
   const [activeCaseStudyId, setActiveCaseStudyId] = useState(CASE_STUDIES[0].id);
+  const [caseStudyPhotoIndex, setCaseStudyPhotoIndex] = useState(0);
   const [testimonialIndex, setTestimonialIndex] = useState(0);
   const [legalModal, setLegalModal] = useState<'privacy' | 'terms' | null>(null);
   const [returnToLeadForm, setReturnToLeadForm] = useState(false);
@@ -360,6 +370,22 @@ export default function App() {
       document.body.style.overflow = 'unset';
     };
   }, [phase, legalModal, resourceFormPhase]);
+
+  useEffect(() => {
+    if (isInitialCaseStudy.current) { isInitialCaseStudy.current = false; return; }
+    if (caseStudyDetailRef.current) {
+      window.scrollTo({ top: caseStudyDetailRef.current.getBoundingClientRect().top + window.scrollY - 16, behavior: 'smooth' });
+    }
+  }, [activeCaseStudyId]);
+
+  useEffect(() => {
+    setCaseStudyPhotoIndex(0);
+    if (!activeCaseStudy.secondaryImage) return;
+    const timer = setInterval(() => {
+      setCaseStudyPhotoIndex((i: number) => i === 0 ? 1 : 0);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [activeCaseStudyId]);
 
   const nextTestimonial = () => {
     setTestimonialIndex((prev) => (prev + 1) % TESTIMONIALS.length);
@@ -821,6 +847,33 @@ export default function App() {
                 transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
               />
             </div>
+            <motion.div
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 4.5, duration: 0.6, ease: 'easeOut' }}
+              className="flex items-center gap-1.5 bg-black/[0.04] border border-black/8 rounded-full px-3 py-1"
+            >
+              <motion.span
+                animate={{ rotate: [-8, 8, -8] }}
+                transition={{ delay: 5.2, duration: 0.4, repeat: 3, ease: 'easeInOut' }}
+                className="text-[10px]"
+              >⚠️</motion.span>
+              <span className="text-[8px] uppercase tracking-[0.25em] text-black/40 font-semibold whitespace-nowrap">warning: there's a lot here</span>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 4.5, duration: 0.6 }}
+              className="relative w-px h-24 overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-transparent" />
+              <motion.div
+                className="absolute top-0 left-0 w-full bg-gradient-to-b from-transparent via-black/50 to-transparent"
+                style={{ height: '40%' }}
+                animate={{ y: ['-100%', '350%'] }}
+                transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
+              />
+            </motion.div>
           </motion.div>
         )}
       </section>
@@ -830,7 +883,6 @@ export default function App() {
 
         {/* Case Studies Section */}
         <section id="case-studies" className="pt-20 pb-24 md:pt-24 md:pb-32 px-6 bg-white relative overflow-hidden">
-          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/[0.03] to-transparent" />
 
           <div className="max-w-6xl mx-auto space-y-10 md:space-y-12 relative z-10">
             <div className="max-w-4xl mx-auto space-y-4 text-center">
@@ -851,16 +903,26 @@ export default function App() {
               >
                 We deliver more than just <span className="italic font-serif">results.</span>
               </motion.h2>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.15 }}
+                className="text-black/45 font-light leading-relaxed md:text-lg max-w-2xl mx-auto"
+              >
+                We create partnerships that drive growth, protect momentum, and turn strategy into measurable outcomes.
+              </motion.p>
             </div>
 
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeCaseStudy.id}
+                ref={caseStudyDetailRef}
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -12 }}
                 transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                className="max-w-5xl mx-auto rounded-[40px] border border-black/8 bg-[linear-gradient(180deg,rgba(252,252,252,1)_0%,rgba(246,246,246,0.96)_100%)] p-6 md:p-10 lg:p-12 shadow-[0_24px_90px_rgba(0,0,0,0.06)]"
+                className="max-w-5xl mx-auto rounded-[40px] border border-black/8 bg-white p-6 md:p-10 lg:p-12 shadow-[0_24px_90px_rgba(0,0,0,0.06)]"
               >
                 <div className="space-y-10 md:space-y-12 text-center">
                   <div className="space-y-4 max-w-3xl mx-auto">
@@ -897,9 +959,29 @@ export default function App() {
                       </div>
                     ) : activeCaseStudy.image ? (
                       activeCaseStudy.secondaryImage ? (
-                        <div className="grid grid-cols-[2fr_1fr] gap-3">
-                          <img src={activeCaseStudy.image} alt={activeCaseStudy.imageLabel} loading="lazy" className="w-full h-72 md:h-96 object-cover rounded-[24px] border border-black/8" />
-                          <img src={activeCaseStudy.secondaryImage} alt="On-site" loading="lazy" className="w-full h-72 md:h-96 object-cover rounded-[24px] border border-black/8" />
+                        <div className="relative w-full aspect-[16/9] rounded-[32px] border border-black/8 overflow-hidden">
+                          <AnimatePresence mode="sync">
+                            <motion.img
+                              key={caseStudyPhotoIndex}
+                              src={caseStudyPhotoIndex === 0 ? activeCaseStudy.image : activeCaseStudy.secondaryImage}
+                              alt={activeCaseStudy.imageLabel}
+                              loading="lazy"
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              exit={{ opacity: 0 }}
+                              transition={{ duration: 1.2, ease: 'easeInOut' }}
+                              className="absolute inset-0 w-full h-full object-cover"
+                            />
+                          </AnimatePresence>
+                          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+                            {[0, 1].map(i => (
+                              <button
+                                key={i}
+                                onClick={() => setCaseStudyPhotoIndex(i)}
+                                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${caseStudyPhotoIndex === i ? 'bg-white scale-125' : 'bg-white/40'}`}
+                              />
+                            ))}
+                          </div>
                         </div>
                       ) : (
                         <img
@@ -1049,91 +1131,16 @@ export default function App() {
         </section>
 
         {/* Retail Clients Section */}
-        <section className="py-20 md:py-24 px-6 bg-white border-t border-black/5 relative overflow-hidden">
-          <div className="max-w-5xl mx-auto space-y-10 md:space-y-12 text-center">
-            <div className="space-y-4 max-w-3xl mx-auto">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="text-[11px] md:text-[12px] uppercase tracking-[0.45em] md:tracking-[0.6em] text-black/40"
-              >
-                Retail Clients
-              </motion.div>
-              <motion.h2
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
-                className="text-4xl sm:text-5xl md:text-6xl font-light tracking-tight leading-[0.95]"
-              >
-                We work with everyday <span className="italic font-serif">clients, too.</span>
-              </motion.h2>
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.15 }}
-                className="text-black/50 font-light leading-relaxed md:text-lg"
-              >
-                Alongside developers and investors, we help buyers, sellers, landlords, and homeowners make confident real estate decisions with clear strategy, strong execution, and hands-on support.
-              </motion.p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="rounded-[28px] border border-black/8 bg-black/[0.02] p-6 md:p-7 text-center space-y-4"
-              >
-                <div className="mx-auto h-12 w-12 rounded-2xl bg-white border border-black/8 flex items-center justify-center">
-                  <Home className="w-5 h-5 text-black/75" />
-                </div>
-                <div className="space-y-2">
-                  <div className="text-[10px] uppercase tracking-[0.3em] text-black/35 font-semibold">Buyers</div>
-                  <p className="text-black/55 font-light leading-7">
-                    Guidance for first-time buyers, move-up buyers, and families who want a smarter acquisition strategy.
-                  </p>
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.08 }}
-                className="rounded-[28px] border border-black/8 bg-black/[0.02] p-6 md:p-7 text-center space-y-4"
-              >
-                <div className="mx-auto h-12 w-12 rounded-2xl bg-white border border-black/8 flex items-center justify-center">
-                  <Wallet className="w-5 h-5 text-black/75" />
-                </div>
-                <div className="space-y-2">
-                  <div className="text-[10px] uppercase tracking-[0.3em] text-black/35 font-semibold">Sellers</div>
-                  <p className="text-black/55 font-light leading-7">
-                    Pricing, positioning, and negotiation support designed to protect value and create a smoother sale.
-                  </p>
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.16 }}
-                className="rounded-[28px] border border-black/8 bg-black/[0.02] p-6 md:p-7 text-center space-y-4"
-              >
-                <div className="mx-auto h-12 w-12 rounded-2xl bg-white border border-black/8 flex items-center justify-center">
-                  <Users className="w-5 h-5 text-black/75" />
-                </div>
-                <div className="space-y-2">
-                  <div className="text-[10px] uppercase tracking-[0.3em] text-black/35 font-semibold">Landlords & Homeowners</div>
-                  <p className="text-black/55 font-light leading-7">
-                    Practical support for leasing, management decisions, and real estate planning across every stage of ownership.
-                  </p>
-                </div>
-              </motion.div>
-            </div>
+        <section className="pt-12 pb-0 px-6 bg-white border-t border-black/5">
+          <div className="max-w-5xl mx-auto text-center">
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-[11px] uppercase tracking-[0.45em] text-black/35 text-center"
+            >
+              We also work with everyday buyers, sellers, and landlords
+            </motion.p>
           </div>
         </section>
 
@@ -1237,75 +1244,99 @@ export default function App() {
           </div>
         </section>
 
-        {/* Resources Section */}
-        <section id="resources" className="py-32 px-6 bg-white border-t border-black/5 relative overflow-hidden">
-          {/* Subtle background element */}
-          <div className="absolute top-0 right-0 w-1/3 h-full bg-black/[0.01] -skew-x-12 translate-x-1/2" />
+        {/* Property Management Section */}
+        <section id="property-management" className="py-24 md:py-32 px-6 bg-white border-t border-black/5 relative overflow-hidden">
+          <div className="max-w-5xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-start">
 
-          <div className="max-w-5xl mx-auto space-y-20 relative z-10">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-              <div className="space-y-4">
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  className="text-[12px] uppercase tracking-[0.6em] text-black/40"
-                >
-                  Start here.
-                </motion.div>
-                <motion.h2
+              <div className="space-y-8">
+                <div className="space-y-4">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="text-[12px] uppercase tracking-[0.6em] text-black/40"
+                  >
+                    Property Management
+                  </motion.div>
+                  <motion.h2
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.1 }}
+                    className="text-4xl md:text-5xl font-light tracking-tight leading-[1.05]"
+                  >
+                    You focus on scaling. <span className="italic font-serif">LAUNCH handles the rest.</span>
+                  </motion.h2>
+                </div>
+                <motion.p
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  className="text-5xl md:text-6xl font-light tracking-tight leading-tight"
+                  transition={{ delay: 0.15 }}
+                  className="text-black/50 font-light leading-relaxed md:text-lg"
                 >
-                  Resources I use with clients <br />
-                  <span className="italic font-serif">to navigate the market with clarity.</span>
-                </motion.h2>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {RESOURCES.map((resource, index) => (
-                <motion.div
-                  key={resource.id}
-                  initial={{ opacity: 0, y: 30 }}
+                  I founded LAUNCH as a vertical for our clients. Our construction crew and management team are both in-house. We handle everything from renovation through stabilization so our clients can focus on what matters: scaling their portfolio.
+                </motion.p>
+                <motion.a
+                  href={CALENDLY_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ y: -10, transition: { duration: 0.3 } }}
-                  className="group relative p-10 rounded-[40px] border border-black/5 bg-black/[0.01] hover:bg-white hover:border-black/10 hover:shadow-2xl hover:shadow-black/5 transition-all duration-700 flex flex-col justify-between min-h-[320px]"
+                  transition={{ delay: 0.2 }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="inline-flex items-center gap-3 px-6 py-3 bg-black text-white text-[10px] font-light tracking-[0.25em] uppercase hover:bg-black/80 transition-colors"
                 >
-                  <div className="space-y-6">
-                    <div className="flex justify-between items-start">
-                      <motion.div
-                        whileHover={{ rotate: 5, scale: 1.1 }}
-                        className="w-12 h-12 rounded-2xl bg-black/5 flex items-center justify-center group-hover:bg-black group-hover:text-white transition-colors duration-500"
-                      >
-                        {index === 0 ? <Home className="w-5 h-5" /> : index === 1 ? <BarChart3 className="w-5 h-5" /> : <Wallet className="w-5 h-5" />}
-                      </motion.div>
-                      <span className="text-[10px] uppercase tracking-widest text-black/30 font-bold">{resource.target}</span>
-                    </div>
-                    <div className="space-y-3">
-                      <h3 className="text-2xl font-bold tracking-tight group-hover:translate-x-1 transition-transform duration-500">{resource.title}</h3>
-                      <div className="text-xs font-bold text-black/80 uppercase tracking-widest">{resource.subtitle}</div>
-                      <p className="text-black/50 font-light leading-relaxed">{resource.description}</p>
-                    </div>
-                  </div>
+                  Book a Meeting
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </motion.a>
+              </div>
 
-                  <motion.button
-                    whileHover={{ x: 5 }}
-                    onClick={() => {
-                      setActiveResource(resource);
-                      setResourceFormPhase('form');
-                    }}
-                    className="mt-8 flex items-center gap-3 text-[10px] font-bold tracking-[0.2em] uppercase text-black/40 group-hover:text-black transition-colors"
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {[
+                  {
+                    label: 'In-House Construction',
+                    icon: <TrendingUp className="w-4 h-4 text-black/60" />,
+                    body: 'Light rehab to full renovation. Our crew is in-house. No outsourcing, no third-party margin loss.',
+                  },
+                  {
+                    label: 'In-House Management',
+                    icon: <Key className="w-4 h-4 text-black/60" />,
+                    body: 'Tenant placement, rent collection, and day-to-day operations handled entirely by our team.',
+                  },
+                  {
+                    label: 'Non-Traditional Strategies',
+                    icon: <Zap className="w-4 h-4 text-black/60" />,
+                    body: 'Short-term, mid-term, and hybrid models for investors targeting higher yield or flexible occupancy.',
+                  },
+                  {
+                    label: 'Custom Portfolio Solutions',
+                    icon: <Shield className="w-4 h-4 text-black/60" />,
+                    body: 'We build around your workflow, not a one-size-fits-all structure. Whatever makes sense for your portfolio.',
+                  },
+                ].map((item, i) => (
+                  <motion.div
+                    key={item.label}
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1 }}
+                    className="rounded-[24px] border border-black/8 bg-black/[0.01] p-5 md:p-6 space-y-3"
                   >
-                    Get it
-                    <div className="w-8 h-px bg-black/10 group-hover:w-12 group-hover:bg-black transition-all duration-500" />
-                  </motion.button>
-                </motion.div>
-              ))}
+                    <div className="flex items-center gap-3">
+                      <div className="h-7 w-7 rounded-xl bg-white border border-black/8 flex items-center justify-center shrink-0">
+                        {item.icon}
+                      </div>
+                      <div className="text-[11px] uppercase tracking-[0.3em] text-black/50 font-semibold">{item.label}</div>
+                    </div>
+                    <p className="text-black/50 font-light leading-relaxed text-sm">{item.body}</p>
+                  </motion.div>
+                ))}
+              </div>
+
             </div>
           </div>
         </section>
