@@ -672,7 +672,7 @@ export default function App() {
               style={{ opacity: heroOpacity, y: heroY }}
               className="z-20 w-full h-full max-w-7xl mx-auto px-6 flex flex-col justify-center items-center text-center absolute inset-0 pointer-events-none"
             >
-              <div className="max-w-4xl pt-24 md:pt-0" style={{ pointerEvents: phase === 'landing' ? 'auto' : 'none' }}>
+              <div className="max-w-4xl pt-24 md:pt-0 pb-56 md:pb-0" style={{ pointerEvents: phase === 'landing' ? 'auto' : 'none' }}>
                 <div className="space-y-6 md:space-y-8 mb-12 md:mb-16 flex flex-col items-center">
                   <motion.div
                     initial={{ opacity: 0 }}
@@ -864,7 +864,7 @@ export default function App() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 4.5, duration: 0.6 }}
-              className="relative w-px h-24 overflow-hidden"
+              className="relative w-px h-14 md:h-24 overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-transparent" />
               <motion.div
