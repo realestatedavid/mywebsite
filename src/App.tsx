@@ -1246,56 +1246,53 @@ export default function App() {
 
         {/* Property Management Section */}
         <section id="property-management" className="py-24 md:py-32 px-6 bg-white border-t border-black/5 relative overflow-hidden">
-          <div className="max-w-5xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-start">
+          <div className="max-w-5xl mx-auto space-y-12 text-center">
 
-              <div className="space-y-8">
-                <div className="space-y-4">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="text-[12px] uppercase tracking-[0.6em] text-black/40"
-                  >
-                    Property Management
-                  </motion.div>
-                  <motion.h2
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.1 }}
-                    className="text-4xl md:text-5xl font-light tracking-tight leading-[1.05]"
-                  >
-                    You focus on scaling. <span className="italic font-serif">LAUNCH handles the rest.</span>
-                  </motion.h2>
-                </div>
-                <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.15 }}
-                  className="text-black/50 font-light leading-relaxed md:text-lg"
-                >
-                  I founded LAUNCH as a vertical for our clients. Our construction crew and management team are both in-house. We handle everything from renovation through stabilization so our clients can focus on what matters: scaling their portfolio.
-                </motion.p>
-                <motion.a
-                  href={CALENDLY_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.2 }}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="inline-flex items-center gap-3 px-6 py-3 bg-black text-white text-[10px] font-light tracking-[0.25em] uppercase hover:bg-black/80 transition-colors"
-                >
-                  Book a Meeting
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </motion.a>
-              </div>
+            <div className="max-w-3xl mx-auto space-y-5">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="text-[12px] uppercase tracking-[0.6em] text-black/40"
+              >
+                Property Management
+              </motion.div>
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+                className="text-4xl sm:text-5xl md:text-6xl font-light tracking-tight leading-[0.95]"
+              >
+                You focus on scaling. <span className="italic font-serif">LAUNCH handles the rest.</span>
+              </motion.h2>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.15 }}
+                className="text-black/50 font-light leading-relaxed md:text-lg"
+              >
+                I founded LAUNCH as a vertical for our clients. Our construction crew and management team are both in-house. We handle everything from renovation through stabilization so our clients can focus on what matters: scaling their portfolio.
+              </motion.p>
+              <motion.a
+                href={CALENDLY_URL}
+                target="_blank"
+                rel="noreferrer"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="inline-flex items-center gap-3 px-6 py-3 bg-black text-white text-[10px] font-light tracking-[0.25em] uppercase hover:bg-black/80 transition-colors mx-auto"
+              >
+                Book a Meeting
+                <ArrowRight className="w-3.5 h-3.5" />
+              </motion.a>
+            </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                 {[
                   {
                     label: 'In-House Construction',
@@ -1337,7 +1334,6 @@ export default function App() {
                 ))}
               </div>
 
-            </div>
           </div>
         </section>
 
