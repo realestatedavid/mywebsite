@@ -7,7 +7,7 @@ import { useEffect, useRef, useState, FormEvent } from 'react';
 import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import gsap from 'gsap';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
 import { ArrowRight, CheckCircle2, Home, Key, TrendingUp, Wallet, BarChart3, Shield, Zap, MapPin, Users, Award, Star, X, Mail, AlertCircle } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 
@@ -331,6 +331,10 @@ const CALENDLY_URL = 'https://calendly.com/rentallaunch/30min';
 
 export default function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const heroRef = useRef<HTMLElement>(null);
+  const { scrollYProgress: heroScroll } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
+  const heroOpacity = useTransform(heroScroll, [0, 0.6], [1, 0]);
+  const heroY = useTransform(heroScroll, [0, 0.6], [0, -40]);
   const [phase, setPhase] = useState<'intro' | 'landing' | 'form' | 'success'>('intro');
   const [leadData, setLeadData] = useState<LeadData>({ name: '', email: '', phone: '', notes: '', smsConsent: false });
   const [activeResource, setActiveResource] = useState<Resource | null>(null);
@@ -618,7 +622,7 @@ export default function App() {
           </motion.div>
         )}
       </AnimatePresence>
-      <section className="relative w-full h-screen min-h-[100svh] flex justify-center items-center overflow-hidden">
+      <section ref={heroRef} className="relative w-full h-screen min-h-[100svh] flex justify-center items-center overflow-hidden">
         {/* Globe Canvas Background */}
         <div className={`absolute inset-0 flex items-center justify-center transition-all duration-[1500ms] ease-in-out ${phase !== 'intro' ? 'opacity-0 scale-125 pointer-events-none' : 'opacity-100'}`}>
           <div className="relative w-[800px] h-[800px] max-w-[150vw] translate-x-0">
@@ -639,6 +643,7 @@ export default function App() {
               initial={{ opacity: 1 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0, scale: 0.98 }}
+              style={{ opacity: heroOpacity, y: heroY }}
               className="z-20 w-full h-full max-w-7xl mx-auto px-6 flex flex-col justify-center items-center text-center absolute inset-0 pointer-events-none"
             >
               <div className="max-w-4xl pt-24 md:pt-0" style={{ pointerEvents: phase === 'landing' ? 'auto' : 'none' }}>
@@ -803,15 +808,19 @@ export default function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 2 }}
-            className="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-black/30 cursor-pointer group z-30"
+            className="absolute bottom-0 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 text-black/30 cursor-pointer group z-30 pb-0"
             onClick={scrollToWorkSection}
           >
             <span className="text-[8px] md:text-[9px] uppercase tracking-[0.4em] md:tracking-[0.5em] group-hover:text-black transition-colors font-bold whitespace-nowrap">Scroll to Explore Our Work</span>
-            <motion.div
-              animate={{ y: [0, 5, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="w-px h-10 bg-gradient-to-b from-black/20 to-transparent"
-            />
+            <div className="relative w-px h-24 overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-transparent" />
+              <motion.div
+                className="absolute top-0 left-0 w-full bg-gradient-to-b from-transparent via-black/50 to-transparent"
+                style={{ height: '40%' }}
+                animate={{ y: ['-100%', '350%'] }}
+                transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+              />
+            </div>
           </motion.div>
         )}
       </section>
@@ -820,10 +829,29 @@ export default function App() {
       <div className={`transition-opacity duration-75 ${phase === 'intro' || phase === 'form' ? 'opacity-0 pointer-events-none select-none' : 'opacity-100'}`}>
 
         {/* Case Studies Section */}
-        <section id="case-studies" className="py-24 md:py-32 px-6 bg-white border-t border-black/5 relative overflow-hidden">
-          <div className="absolute inset-x-0 top-0 h-48 bg-[radial-gradient(circle_at_top,rgba(0,0,0,0.06),transparent_65%)]" />
+        <section id="case-studies" className="pt-20 pb-24 md:pt-24 md:pb-32 px-6 bg-white relative overflow-hidden">
+          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/[0.03] to-transparent" />
 
           <div className="max-w-6xl mx-auto space-y-10 md:space-y-12 relative z-10">
+            <div className="max-w-4xl mx-auto space-y-4 text-center">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="text-[11px] md:text-[12px] uppercase tracking-[0.45em] md:tracking-[0.6em] text-black/40"
+              >
+                Case Studies
+              </motion.div>
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+                className="text-4xl sm:text-5xl md:text-6xl font-light tracking-tight leading-[0.95]"
+              >
+                We deliver more than just <span className="italic font-serif">results.</span>
+              </motion.h2>
+            </div>
 
             <AnimatePresence mode="wait">
               <motion.div
@@ -1002,10 +1030,7 @@ export default function App() {
                     type="button"
                     whileHover={{ y: -4, transition: { duration: 0.2 } }}
                     whileTap={{ scale: 0.98 }}
-                    onClick={() => {
-                      setActiveCaseStudyId(study.id);
-                      document.getElementById('case-studies')?.scrollIntoView({ behavior: 'smooth' });
-                    }}
+                    onClick={() => setActiveCaseStudyId(study.id)}
                     className="rounded-[28px] border border-black/8 bg-black/[0.02] hover:bg-white hover:border-black/20 hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)] p-5 text-left transition-all duration-300"
                   >
                     <div className="space-y-3">
