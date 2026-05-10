@@ -672,7 +672,7 @@ export default function App() {
           </motion.div>
         )}
       </AnimatePresence>
-      <section ref={heroRef} className="relative w-full h-screen min-h-[100svh] flex justify-center items-center overflow-hidden">
+      <section ref={heroRef} className="relative w-full h-[100svh] flex justify-center items-center overflow-hidden">
         {/* Globe Canvas Background */}
         <div className={`absolute inset-0 flex items-center justify-center transition-all duration-[1500ms] ease-in-out ${phase !== 'intro' ? 'opacity-0 scale-125 pointer-events-none' : 'opacity-100'}`}>
           <div className="relative w-[800px] h-[800px] max-w-[150vw] translate-x-0">
