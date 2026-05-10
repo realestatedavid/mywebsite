@@ -519,7 +519,7 @@ export default function App() {
     tl.to(animState, {
       lon: initialRotation[0] + 360 + 74, // Target 74W so Boston (71W) is prominently featured
       lat: -40,
-      duration: 2.0,
+      duration: 2.7,
       ease: "power3.inOut",
       onUpdate: () => {
         projection.rotate([animState.lon, animState.lat]);
@@ -527,17 +527,17 @@ export default function App() {
       }
     }, 0);
 
-    // Zoom canvas gracefully over the same 2 seconds
+    // Zoom canvas gracefully over the same 2.7 seconds
     tl.to(canvasRef.current, {
       scale: 2.5,
-      duration: 2.0,
+      duration: 2.7,
       ease: "power3.inOut"
     }, 0);
 
     // Phase 2: Transition to Landing
     tl.add(() => {
       setPhase('landing');
-    }, 2.0);
+    }, 2.7);
 
     return () => {
       // Cleanup
