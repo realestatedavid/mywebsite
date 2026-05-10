@@ -697,6 +697,13 @@ export default function App() {
               className="z-20 w-full h-full max-w-7xl mx-auto px-6 flex flex-col justify-center items-center text-center absolute inset-0 pointer-events-none"
             >
               <div className="max-w-4xl pt-24 md:pt-0 pb-56 md:pb-0" style={{ pointerEvents: phase === 'landing' ? 'auto' : 'none' }}>
+                <div className="relative px-8 md:px-14 py-10 md:py-12">
+                  {/* Corner brackets */}
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8, duration: 1 }} className="absolute top-0 left-0 w-7 h-7 border-t border-l border-black/20" />
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8, duration: 1 }} className="absolute top-0 right-0 w-7 h-7 border-t border-r border-black/20" />
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8, duration: 1 }} className="absolute bottom-0 left-0 w-7 h-7 border-b border-l border-black/20" />
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8, duration: 1 }} className="absolute bottom-0 right-0 w-7 h-7 border-b border-r border-black/20" />
+
                 <div className="space-y-6 md:space-y-8 mb-12 md:mb-16 flex flex-col items-center">
                   <motion.div
                     initial={{ opacity: 0 }}
@@ -737,6 +744,7 @@ export default function App() {
                     />
                   </motion.button>
                 </motion.div>
+                </div>
               </div>
             </motion.div>
           )}
@@ -862,7 +870,7 @@ export default function App() {
             onClick={scrollToWorkSection}
           >
             <span className="text-[8px] md:text-[9px] uppercase tracking-[0.4em] md:tracking-[0.5em] group-hover:text-black transition-colors font-bold whitespace-nowrap">Scroll to Explore Our Work</span>
-            <div className="relative w-px h-24 overflow-hidden">
+            <div className="relative w-px h-14 md:h-20 overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-transparent" />
               <motion.div
                 className="absolute top-0 left-0 w-full bg-gradient-to-b from-transparent via-black/50 to-transparent"
@@ -871,33 +879,14 @@ export default function App() {
                 transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
               />
             </div>
-            <motion.div
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 2.5, duration: 0.6, ease: 'easeOut' }}
-              className="flex items-center gap-1.5 bg-black/[0.04] border border-black/8 rounded-full px-3 py-1"
-            >
-              <motion.span
-                animate={{ rotate: [-8, 8, -8] }}
-                transition={{ delay: 3.2, duration: 0.4, repeat: 3, ease: 'easeInOut' }}
-                className="text-[10px]"
-              >⚠️</motion.span>
-              <span className="text-[8px] uppercase tracking-[0.25em] text-black/40 font-semibold whitespace-nowrap">warning: there's a lot here</span>
-            </motion.div>
-            <motion.div
+            <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 2.5, duration: 0.6 }}
-              className="relative w-px h-14 md:h-24 overflow-hidden"
+              transition={{ delay: 2.5, duration: 1 }}
+              className="text-[8px] italic text-black/25 tracking-wide whitespace-nowrap"
             >
-              <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-transparent" />
-              <motion.div
-                className="absolute top-0 left-0 w-full bg-gradient-to-b from-transparent via-black/50 to-transparent"
-                style={{ height: '40%' }}
-                animate={{ y: ['-100%', '350%'] }}
-                transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
-              />
-            </motion.div>
+              there's a lot here
+            </motion.p>
           </motion.div>
         )}
       </section>
