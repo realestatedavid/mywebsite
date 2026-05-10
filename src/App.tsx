@@ -275,8 +275,9 @@ const CASE_STUDIES: CaseStudy[] = [
     summary: '',
     audience: 'Deal origination',
     location: 'Haverhill',
-    imageLabel: 'Agent Investor Podcast',
-    imageHint: 'Add a photo from the deal or the podcast appearance here.',
+    image: '/images/magnific__high-res-the-image__19088.png',
+    imageLabel: 'Agent Investor Podcast — Deal of a Lifetime',
+    imageHint: 'Agent Investor Podcast episode thumbnail.',
     metrics: [
       { value: '$1M', label: 'Net worth created' },
       { value: '$500K', label: '16-Unit Portfolio Wholesale' },
