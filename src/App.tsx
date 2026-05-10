@@ -29,6 +29,7 @@ interface Testimonial {
   rating: number;
 }
 
+
 interface Resource {
   id: string;
   title: string;
@@ -125,29 +126,6 @@ const TESTIMONIALS: Testimonial[] = [
   }
 ];
 
-const RESOURCES: Resource[] = [
-  {
-    id: 'first-time-buyer',
-    title: "Don't Buy A Home Until You Read This",
-    subtitle: 'The First Time Buyer Playbook',
-    description: 'Know what to expect in the process and avoid costly mistakes.',
-    target: 'For Buyers'
-  },
-  {
-    id: 'buy-or-pass',
-    title: 'Buy or Pass',
-    subtitle: 'Rental Deal Analyzer (Cash Flow, ROI & Cap Rate)',
-    description: 'Underwrite the deal before you risk capital.',
-    target: 'For Investors'
-  },
-  {
-    id: 'walk-away-number',
-    title: 'What Will You Actually Walk Away With?',
-    subtitle: 'Instant Net Proceeds Calculator',
-    description: 'See what you keep after fees, taxes, and payoff.',
-    target: 'For Sellers'
-  }
-];
 
 const CASE_STUDIES: CaseStudy[] = [
   {
@@ -357,7 +335,6 @@ const renderText = (text: string) =>
       : part
   );
 
-const SMS_CONSENT_COPY = `I agree to receive text messages from David Tran and Rental Launch LLC about my inquiry and real estate services. Consent is not a condition of purchase. Reply STOP to unsubscribe. Reply HELP for help. Message frequency varies. Message and data rates may apply.`;
 const CALENDLY_URL = 'https://calendly.com/rentallaunch/30min';
 
 export default function App() {
@@ -438,11 +415,7 @@ export default function App() {
   useEffect(() => {
     const width = 800;
     const height = 800;
-    const sensitivity = 75;
-
     if (!canvasRef.current) return;
-
-    const canvas = d3.select(canvasRef.current);
     const context = canvasRef.current.getContext('2d');
     if (!context) return;
 
@@ -456,7 +429,6 @@ export default function App() {
     const path = d3.geoPath().projection(projection).context(context);
 
     let world: any;
-    let rotation = 0;
 
     d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then((data: any) => {
       world = {
@@ -543,65 +515,6 @@ export default function App() {
       // Cleanup
     };
   }, []);
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-
-    // Manual Validation
-    const newErrors: { [key: string]: string } = {};
-    if (!leadData.name.trim()) newErrors.name = 'Name is required';
-    if (!leadData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!validateEmail(leadData.email)) {
-      newErrors.email = 'Please enter a valid email';
-    }
-    const phoneDigits = leadData.phone.replace(/\D/g, '');
-    if (!leadData.phone.trim()) {
-      newErrors.phone = 'Phone is required';
-    } else if (phoneDigits.length !== 10) {
-      newErrors.phone = 'Please enter a 10-digit number';
-    }
-    if (!leadData.smsConsent) {
-      newErrors.smsConsent = 'Consent is required';
-    }
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      showToast('Please check the highlighted fields.');
-      return;
-    }
-
-    setErrors({});
-    setIsSubmitting(true);
-
-    const serviceId = 'service_db6tyc6';
-    const templateId = 'template_okqunbe';
-    const publicKey = 'g44ZXFbPVqFe3FUtC';
-
-    try {
-      await emailjs.send(
-        serviceId,
-        templateId,
-        {
-          from_name: leadData.name,
-          from_email: leadData.email,
-          phone: leadData.phone,
-          notes: leadData.notes,
-          lead_type: 'consultation',
-          sms_opt_in: leadData.smsConsent ? 'Yes' : 'No',
-          message: `New consultation request from website. Notes: ${leadData.notes.trim() || 'None provided'}. SMS consent: ${leadData.smsConsent ? 'Yes' : 'No'}.`,
-          to_name: 'David Tran',
-        },
-        publicKey
-      );
-      setPhase('success');
-    } catch (error) {
-      console.error('EmailJS Error:', error);
-      showToast('Something went wrong. Please try again.', 'error');
-    }
-
-    setIsSubmitting(false);
-  };
 
   const handleResourceSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -1388,7 +1301,7 @@ export default function App() {
             </div>
 
             <div className="space-y-20">
-              {CLIENTELE_CATEGORIES.map((category, catIdx) => (
+              {CLIENTELE_CATEGORIES.map((category) => (
                 <div key={category.id} className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                   <div className="lg:col-span-3">
                     <motion.div
