@@ -268,6 +268,30 @@ const CASE_STUDIES: CaseStudy[] = [
       'At 22, the client owns a **cash-flowing Boston asset** with long-term equity upside.',
     ],
   },
+  {
+    id: 'deal-of-a-lifetime',
+    label: 'Off-Market Origination',
+    title: 'A lead nobody followed up on for two years created $1M in combined net worth.',
+    summary: '',
+    audience: 'Two investors',
+    location: 'Greater Boston',
+    imageLabel: 'Deal of a Lifetime',
+    imageHint: 'Add a photo from the deal or podcast appearance here.',
+    metrics: [
+      { value: '$1M', label: 'Combined net worth increase' },
+      { value: '$500K', label: 'Combined wholesale fees' },
+      { value: '2+ Years', label: 'Lead sat untouched' },
+      { value: '$500', label: 'Deposit to control the deal' },
+    ],
+    challenge: 'The lead had been sitting in **multiple experienced investors\' CRMs for over two years**, including a veteran who had it since April 2021. Nobody had followed up consistently enough to convert it. The seller owned a significant multi-family portfolio across Greater Boston and was overwhelmed but not actively selling.',
+    solution: 'David made the cold call, followed up four to six times, and identified a fire at one of the seller\'s properties as the **moment to push for the appointment**. He showed up with authenticity: two young, hungry buyers who reflected the seller\'s own ambition back at him. Once the relationship was built, the deal was structured to match each buyer\'s exact situation.',
+    results: [
+      '**$500K in combined wholesale fees** across two transactions, with deposits of $500 and $1,000.',
+      '**$1M in combined net worth increase** for both investors.',
+      'Deal matched perfectly: a **1031 exchange into 16 units** for one investor, a clean first rental for the other.',
+      'Featured on the Agent Investor Podcast: "Deal of a Lifetime: How 2 Agent-Investors Increased Their Net Worth By $1 Million." February 2023.',
+    ],
+  },
 ];
 
 const CLIENTELE_CATEGORIES = [
@@ -1105,7 +1129,7 @@ export default function App() {
 
             <div className="space-y-5 max-w-5xl mx-auto">
               <div className="text-[10px] uppercase tracking-[0.45em] text-black/30 text-center font-semibold">More Case Studies</div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {CASE_STUDIES.filter(s => s.id !== activeCaseStudy.id).map((study) => (
                   <motion.button
                     key={study.id}
