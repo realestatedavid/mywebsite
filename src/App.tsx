@@ -519,25 +519,25 @@ export default function App() {
     tl.to(animState, {
       lon: initialRotation[0] + 360 + 74, // Target 74W so Boston (71W) is prominently featured
       lat: -40,
-      duration: 3.0,
+      duration: 2.0,
       ease: "power3.inOut",
       onUpdate: () => {
         projection.rotate([animState.lon, animState.lat]);
         render();
       }
     }, 0);
-    
-    // Zoom canvas gracefully over the same 3 seconds
+
+    // Zoom canvas gracefully over the same 2 seconds
     tl.to(canvasRef.current, {
       scale: 2.5,
-      duration: 3.0,
+      duration: 2.0,
       ease: "power3.inOut"
     }, 0);
 
     // Phase 2: Transition to Landing
     tl.add(() => {
       setPhase('landing');
-    }, 3.0);
+    }, 2.0);
 
     return () => {
       // Cleanup
@@ -701,7 +701,7 @@ export default function App() {
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 1.0, duration: 0.8 }}
+                    transition={{ delay: 0.6, duration: 0.6 }}
                     className="text-[11px] md:text-[12px] uppercase tracking-[0.4em] text-black/50 md:text-black/55 font-semibold"
                   >
                     Boston Based Growth Partner
@@ -709,7 +709,7 @@ export default function App() {
                   <motion.h1
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 1.5, duration: 1.2, ease: "easeOut" }}
+                    transition={{ delay: 1.0, duration: 0.8, ease: "easeOut" }}
                     className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light tracking-tight leading-[0.88] md:leading-[0.87] max-w-4xl"
                   >
                     Make decisions that <br />
@@ -720,7 +720,7 @@ export default function App() {
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 3.5, duration: 0.8, ease: "easeOut" }}
+                  transition={{ delay: 2.2, duration: 0.6, ease: "easeOut" }}
                   className="flex flex-col items-center mb-18 md:mb-24"
                 >
                   <motion.button
@@ -857,7 +857,7 @@ export default function App() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 2 }}
+            transition={{ delay: 0.4 }}
             className="absolute bottom-0 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 text-black/30 cursor-pointer group z-30 pb-0"
             onClick={scrollToWorkSection}
           >
@@ -874,12 +874,12 @@ export default function App() {
             <motion.div
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 4.5, duration: 0.6, ease: 'easeOut' }}
+              transition={{ delay: 2.5, duration: 0.6, ease: 'easeOut' }}
               className="flex items-center gap-1.5 bg-black/[0.04] border border-black/8 rounded-full px-3 py-1"
             >
               <motion.span
                 animate={{ rotate: [-8, 8, -8] }}
-                transition={{ delay: 5.2, duration: 0.4, repeat: 3, ease: 'easeInOut' }}
+                transition={{ delay: 3.2, duration: 0.4, repeat: 3, ease: 'easeInOut' }}
                 className="text-[10px]"
               >⚠️</motion.span>
               <span className="text-[8px] uppercase tracking-[0.25em] text-black/40 font-semibold whitespace-nowrap">warning: there's a lot here</span>
@@ -887,7 +887,7 @@ export default function App() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 4.5, duration: 0.6 }}
+              transition={{ delay: 2.5, duration: 0.6 }}
               className="relative w-px h-14 md:h-24 overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-transparent" />
